@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Services from './components/Services';
 import Login from './components/Login';
 import { RootState } from './store/reducers';
+import { ToastContainer } from 'react-toastify';
 
 export default function App() {
   const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
@@ -12,6 +13,8 @@ export default function App() {
   
   return (
     <Provider store={Store}> {/* Wrap your application with the Provider component */}
+        <ToastContainer />
+
       <BrowserRouter>
         <Routes>
           

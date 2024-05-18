@@ -55,6 +55,7 @@ export const loginUser = createAsyncThunk(
 
       return { ...responseData, username, email: responseData.email };
     } catch (error) {
+      
       throw new Error('Login failed. Please check your credentials.');
     }
   }

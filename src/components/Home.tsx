@@ -66,8 +66,8 @@ const Home: React.FC = () => {
   }, [selectedProjectNum]);
   return (
     <div className="grid grid-cols-7 gap-2 bg-[#071e34]">
-      <div className=" p-4 col-span-2 grid grid-rows-9 gap-2 h-[100vh]">
-        <div className=" row-span-2 ">
+      <div className=" p-4 col-span-2 grid grid-rows-11 gap-2 h-[100vh]">
+        <div className=" row-span-3 ">
           <section className="mx-auto bg-[#20354b] rounded-2xl px-2 py-2 shadow-lg">
             <div className="mt-8 ">
               <h2 className="text-white font-bold text-2xl tracking-wide">
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
             </div>
           </section>
         </div>
-        <div className=" row-span-7 text-white  flex flex-col gap-2 overflow-auto ">
+        <div className=" row-span-9 text-white  flex flex-col gap-2 overflow-auto ">
           {tasks.map((item, index) => (
             <Card key={index} item={item} index={index} />
           ))}

@@ -21,6 +21,14 @@ export interface item_type {
   };
   index: number;
 }
+const handleFinish = () => {
+  // Logic to mark the item as finished
+};
+
+// Function to handle the restart action
+const handleRestart = () => {
+  // Logic to restart the work on the item
+};
 export const Card: React.FC<CardProps> = ({ item, index }) => {
   return (
     <div className="w-full max-w-[400px] h-fit py-2 px-2 bg-[#20354b] rounded-2xl shadow-lg grid grid-flow-row">
@@ -49,16 +57,25 @@ export const Card: React.FC<CardProps> = ({ item, index }) => {
         </div>
       </div>
       <div className=" flex  flex-row-reverse items-center justify-between px-2 py-2">
-        <div>
-          <button className="bg-emerald-400 text-white px-4 py-2 rounded-lg">
-            انتهي 
-          </button>
-        </div>
-        <div>
-          <button className="bg-red-800 text-white px-4 py-2 rounded-lg">
-            اعادة العمل عليها 
-          </button>
-        </div>
+      {item.is_finished ? (
+          <div>
+            <button
+              className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
+              onClick={handleRestart}
+            >
+              اعادة العمل عليها
+            </button>
+          </div>
+        ) : (
+          <div>
+            <button
+              className="bg-red-800 text-white px-4 py-2 rounded-lg"
+              onClick={handleFinish}
+            >
+              انتهي
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

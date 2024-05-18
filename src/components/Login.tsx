@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { loginUser } from '../store/companyActions';
+import { toast } from 'react-toastify'; // Make sure to import toast from react-toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 interface LoginProps {
   // Add any props you need
@@ -18,7 +20,6 @@ const Login: React.FC<LoginProps> = () => {
     e.preventDefault();
     try {
       const data:any = await dispatch(loginUser({ username: email, password }));
-      console.log(data.payload);
       dispatch({
         type: 'LOGIN',
         payload: {
@@ -27,18 +28,28 @@ const Login: React.FC<LoginProps> = () => {
         },
       });
     } catch (error) {
+      console.log('ee');
+      toast.error('اسم المستخدم او كلمة المرور غير صحيح', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       // Handle login error
     }
   };
 
   return (
-    <section className="h-screen">
+    <section className="h-screen text-right">
       <div className="h-full flex justify-center items-center">
         <form onSubmit={handleLogin} className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-lg">
-          <h2 className="text-2xl mb-4">Sign In</h2>
+          <h2 className="text-2xl mb-4">تسجيل الدخول</h2>
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2">
-              Username:
+              :اسم المستخدم
             </label>
             <input
               type="text"
@@ -51,7 +62,7 @@ const Login: React.FC<LoginProps> = () => {
 
           <div className="mb-4">
             <label htmlFor="password" className="block mb-2">
-              Password:
+              كلمة المرور
             </label>
             <input
               type="password"
@@ -64,9 +75,9 @@ const Login: React.FC<LoginProps> = () => {
 
           <button
             type="submit"
-            className="w-full btn btn-success bg-green-200 text-white py-2 px-4 rounded-md hover:bg-primary-dark"
+            className="w-full btn btn-success bg-green-200 text-black font-bold py-2 px-4 rounded-md hover:bg-primary-dark"
           >
-            Login
+            تسجيل اللدخول
           </button>
         </form>
       </div>
