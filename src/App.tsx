@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Provider, useSelector } from 'react-redux'; // Import the Provider component
+import Store from './store';
+import Home from './components/Home';
+import Services from './components/Services';
+import Login from './components/Login';
+import { RootState } from './store/reducers';
 
-function App() {
+export default function App() {
+  const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
+  console.log(loggedIn);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={Store}> {/* Wrap your application with the Provider component */}
+      <BrowserRouter>
+        <Routes>
+          
+          <Route path="/" element={ loggedIn ? <Home /> : <Login />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/login" element={<Login />} /> {/* Add a route for the login component */}
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
-
-export default App;
