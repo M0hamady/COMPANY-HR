@@ -17,8 +17,15 @@ const Login: React.FC<LoginProps> = () => {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await dispatch(loginUser({ username: email, password }));
-      dispatch({ type: 'LOGIN' });
+      const data:any = await dispatch(loginUser({ username: email, password }));
+      console.log(data.payload);
+      dispatch({
+        type: 'LOGIN',
+        payload: {
+          token: data.payload.token,
+          name: data.payload.username
+        },
+      });
     } catch (error) {
       // Handle login error
     }
