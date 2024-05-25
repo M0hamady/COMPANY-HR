@@ -26,27 +26,31 @@ const Home: React.FC = () => {
   const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [countUpdates, setCountUpdates] = useState<number | null>(0);
   const [selectedProjectNum, setSelectedProjectNum] = useState<number | null>(null);
   const [selectedProjectTasks, setSelectedProjectTasks] = useState<Task[]>([]);
-  console.log("from home is he logged in? ", loggedIn, name);
-  const items = [1, 2, 3, 4, 5, 6,7,8];
+  // console.log("from home is he logged in? ", loggedIn, name);
   const handleTasks = async () => {
     try {
       const data:any = await dispatch(getTasks());
       const data_projects:any = await dispatch(getProjects());
       setTasks(data.payload)
       setProjects(data_projects.payload)
-      console.log(tasks);
     } catch (error) {
       // Handle login error
     }
   };
-  useEffect(()=>{
-    handleTasks()
-    
-  },[500])
   useEffect(() => {
-    console.log("tr");
+    const interval = setInterval(() => {
+      handleTasks();
+    }, 6000); // Run every second (1000 milliseconds)
+  
+    return () => {
+      clearInterval(interval); // Clean up the interval on component unmount
+    };
+  }, [countUpdates]);
+  useEffect(() => {
+    // console.log("tr");
     const fetchData = async () => {
       try {
         const data:any = await dispatch(getExactProject(selectedProjectNum));
@@ -63,7 +67,7 @@ const Home: React.FC = () => {
     if (selectedProjectNum !== null) {
       fetchData();
     }
-  }, [selectedProjectNum]);
+  }, [selectedProjectNum,countUpdates]);
   return (
     <div className="grid grid-cols-7 gap-2 bg-[#071e34]">
       <div className=" p-4 col-span-2 grid grid-rows-11 gap-2 h-[100vh]">
@@ -90,7 +94,7 @@ const Home: React.FC = () => {
         </div>
         <div className=" row-span-9 text-white  flex flex-col gap-2 overflow-auto ">
           {tasks.map((item, index) => (
-            <Card key={index} item={item} index={index} />
+            <Card key={index} item={item} index={index} setCountUpdates={setCountUpdates}/>
           ))}
         </div>
       </div>
@@ -103,7 +107,7 @@ const Home: React.FC = () => {
        <div className="row-span-7 text-white  flex flex-row justify-around flex-wrap gap-2 overflow-auto">
 
        {selectedProjectTasks.map((item, index) => (
-            <Card key={index} item={item} index={index} />
+            <Card key={index} item={item} index={index} setCountUpdates={setCountUpdates} />
           ))}
        </div>
       </div>

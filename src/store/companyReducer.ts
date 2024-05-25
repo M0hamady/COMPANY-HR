@@ -1,5 +1,6 @@
 import { AnyAction } from 'redux';
 
+
 interface CompanyState {
   name: string | null;
   loggedIn: boolean;
@@ -7,16 +8,45 @@ interface CompanyState {
   projects: any[]; // Placeholder for project data
   projectData: any; // Placeholder for specific project data
   tasks: any[]; // Placeholder for tasks
+  is_client: boolean;
+  userType: string;
 }
 
-const initialState: CompanyState = {
-  name: null,
-  loggedIn: false,
-  token: null,
-  projects: [],
-  projectData: null,
-  tasks: [],
+const initialState: CompanyState | any = () => {
+  const cachedResponse = localStorage.getItem('loginResponse'); 
+  // console.log('cachedResponse',cachedResponse);
+  if (cachedResponse) {
+    try {
+      const data = JSON.parse(cachedResponse);
+      return data;
+    } catch (error) {
+      console.error('Error parsing cached login response:', error);
+      // Fall back to the initial state
+      return {
+        name: null,
+        loggedIn: false,
+        token: null,
+        projects: [],
+        projectData: null,
+        tasks: [],
+        is_client: false,
+        userType: 'site_technical',
+      };
+    }
+  }
+  return {
+    name: null,
+    loggedIn: false,
+    token: null,
+    projects: [],
+    projectData: null,
+    tasks: [],
+    is_client: false,
+    userType: 'site_technical',
+  };
 };
+
+
 
 const companyReducer = (state: CompanyState = initialState, action: AnyAction): CompanyState => {
   switch (action.type) {
@@ -26,6 +56,8 @@ const companyReducer = (state: CompanyState = initialState, action: AnyAction): 
         loggedIn: true,
         name: action.payload.name,
         token: action.payload.token,
+        is_client: action.payload.is_client,
+        userType: action.payload.userType,
       };
     case 'LOGOUT':
       return {

@@ -40,3 +40,33 @@
     transform: rotate(360deg);
   }
 }
+.modal-wrapper {
+  display: none;
+}
+
+.modal-wrapper.open {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: #cf7777;
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 400px;
+  width: 100%;
+  transform: translateY(-100%);
+  transition: transform 60s ease-in-out; /* Updated duration to 60 seconds */
+}
+
+.modal-wrapper.open .modal-content {
+  transform: translateY(0);
+}

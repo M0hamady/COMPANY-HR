@@ -1,8 +1,12 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { assignTaskToFinish } from "../store/companyActions";
+import { Link } from "react-router-dom";
 
 interface CardProps {
   item: any;
   index: number;
+  setCountUpdates: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 export interface item_type {
@@ -21,15 +25,23 @@ export interface item_type {
   };
   index: number;
 }
-const handleFinish = () => {
-  // Logic to mark the item as finished
-};
 
 // Function to handle the restart action
 const handleRestart = () => {
   // Logic to restart the work on the item
 };
-export const Card: React.FC<CardProps> = ({ item, index }) => {
+export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
+  const dispatch = useDispatch();
+
+  const handleFinish = () => {
+    // Ensure that item.id is a number and not null before dispatching
+    if (typeof item.id === "number") {
+      dispatch(assignTaskToFinish(item.id) as any);
+      setCountUpdates(item.id);
+    } else {
+      console.error("item.id is null or not a number");
+    }
+  };
   return (
     <div className="w-full max-w-[400px] h-fit py-2 px-2 bg-[#20354b] rounded-2xl shadow-lg grid grid-flow-row">
       <div className=" flex flex-row-reverse items-center justify-start gap-3 px-2 ">
@@ -40,13 +52,13 @@ export const Card: React.FC<CardProps> = ({ item, index }) => {
         <div className="flex flex-row-reverse gap-2">
           <div>/الاسبوع</div>
           <div className="w-[20px] h-[20px] rounded-full bg-yellow-600 text-white flex items-center justify-center">
-          {item.week  }
+            {item.week}
           </div>
         </div>
         <div className="flex flex-row-reverse gap-2">
           <div>/اسم الباند</div>
           <div className="rounded-full text-white flex items-center justify-center">
-          {item.title}
+            {item.title}
           </div>
         </div>
         <div className="flex flex-row-reverse gap-2">
@@ -57,13 +69,13 @@ export const Card: React.FC<CardProps> = ({ item, index }) => {
         </div>
       </div>
       <div className=" flex  flex-row-reverse items-center justify-between px-2 py-2">
-      {item.is_finished ? (
+        {item.is_finished ? (
           <div>
             <button
               className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
               onClick={handleRestart}
             >
-              اعادة العمل عليها
+              انتهي
             </button>
           </div>
         ) : (
@@ -72,10 +84,18 @@ export const Card: React.FC<CardProps> = ({ item, index }) => {
               className="bg-red-800 text-white px-4 py-2 rounded-lg"
               onClick={handleFinish}
             >
-              انتهي
+              قم بانهاء الخطوة
             </button>
           </div>
         )}
+
+        <Link
+        to={`task/${item.id}`}
+          className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
+          onClick={handleRestart}
+        >
+          عرض
+        </Link>
       </div>
     </div>
   );

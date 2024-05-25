@@ -28,7 +28,7 @@ const Login: React.FC<LoginProps> = () => {
         },
       });
     } catch (error) {
-      console.log('ee');
+      // console.log('ee');
       toast.error('اسم المستخدم او كلمة المرور غير صحيح', {
         position: "top-center",
         autoClose: 5000,

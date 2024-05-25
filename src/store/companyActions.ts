@@ -50,7 +50,7 @@ export const loginUser = createAsyncThunk(
 
       const response = await axios.request(requestConfig);
       const responseData: LoginResponse = response.data;
-
+      localStorage.setItem('loginResponse', JSON.stringify(response.data));
       localStorage.setItem('token', responseData.token);
 
       return { ...responseData, username, email: responseData.email };
@@ -113,7 +113,7 @@ export const getProjects = createAsyncThunk('projects/getProjects', async () => 
 
 export const getExactProject = createAsyncThunk(
   'projects/getExactProject',
-  async (projectId: number| null) => {
+  async (projectId: number| any) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -137,3 +137,70 @@ export const getExactProject = createAsyncThunk(
     }
   }
 );
+export const assignTaskToFinish = createAsyncThunk(
+  'tasks/assignTaskToFinish',
+  async (taskId: number | null, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found in localStorage');
+      }
+
+      const requestConfig: AxiosRequestConfig = {
+        method: 'PUT',
+        url: `${TASKS_API_URL}${taskId}/`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          is_finished: true
+        }
+      };
+
+      const response = await axios.request(requestConfig);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to assign the task as finished');
+    }
+  }
+);
+export const getExactTask = createAsyncThunk(
+  'tasks/assignTaskToFinish',
+  async (taskId: number | any, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found in localStorage');
+      }
+
+      const requestConfig: AxiosRequestConfig = {
+        method: 'GET',
+        url: `${TASKS_API_URL}${taskId}/`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        
+      };
+
+      const response = await axios.request(requestConfig);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to assign the task as finished');
+    }
+  }
+);
+export const logout = createAsyncThunk('auth/logout', async () => {
+  try {
+    // Clear the token from localStorage
+    localStorage.removeItem('token');
+
+    // Clear all other data from localStorage
+    localStorage.clear();
+
+    // Return a success message
+    return 'Logout successful';
+  } catch (error) {
+    throw new Error('Failed to log out');
+  }
+});
