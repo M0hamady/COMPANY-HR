@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosRequestConfig } from 'axios';
 
-const LOGIN_API_URL = 'http://127.0.0.1:8000/api/login/';
-const TASKS_API_URL = 'http://127.0.0.1:8000/api/tasks/';
-const PROJECTS_API_URL = 'http://127.0.0.1:8000/api/projects/';
+const LOGIN_API_URL = 'http://hrsupport.pythonanywhere.com/api/login/';
+const TASKS_API_URL = 'http://hrsupport.pythonanywhere.com/api/tasks/';
+const PROJECTS_API_URL = 'http://hrsupport.pythonanywhere.com/api/projects/';
 
 interface LoginResponse {
   token: string;
