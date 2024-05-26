@@ -99,7 +99,7 @@ const Task = () => {
     <Layout>
       <div className="grid grid-rows-8 gap-4 h-[100vh] text-gray-800 font-bold">
         <div className="row-span-2 h-100 w-full  flex flex-row justify-around my-1">
-          <div className="w-[40%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 p-4 grid grid-rows-8">
+          <div className="w-[100%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 p-4 grid grid-rows-8">
             <div className="row-span-2 border-b-2 border-blue-300  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/مشروع</h4>
@@ -165,13 +165,13 @@ const Task = () => {
               </div>
             </div>
           </div>
-          <div className="w-[40%] h-full bg-blue-200 rounded shadow shadow-slate-300 p-4"></div>
+          {/* <div className="w-[40%] h-full bg-blue-200 rounded shadow shadow-slate-300 p-4"></div> */}
         </div>
         <div className="row-span-6 h-100 w-full ">
           <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">بيانات الباند</h2>
             {task ? (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 max-sm:flex max-sm:flex-col max-sm:overflow-auto max-sm:h-[80%] max-sm:max-h-[60vh] ">
                 <div className="bg-yellow-600 text-white p-4 rounded-lg shadow-md">
                   <h3 className="text-lg font-bold">الملاحظات</h3>
                   <p className="text-lg">{task.description}</p>

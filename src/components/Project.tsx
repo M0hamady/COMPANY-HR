@@ -171,9 +171,9 @@ const Project = () => {
   return (
     <Layout>
       <div className="grid grid-rows-8 gap-4 h-[100vh] text-gray-800 font-bold">
-        <div className="row-span-2 h-100 w-full  flex flex-row justify-around my-1">
-          <div className="w-[40%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 p-4 grid grid-rows-8">
-            <div className="row-span-2 border-b-2 border-blue-300  flex gap-2 flex-row-reverse  justify-between mx-2">
+        <div className="row-span-2 h-100 w-full  flex flex-row justify-around gap-2 max-sm:overflow-auto">
+          <div className="w-[40%] max-sm:w-[300px] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 p-4 grid grid-rows-8">
+            <div className="row-span-2 border-b-2 border-blue-300  flex gap-2 flex-row-reverse  justify-between mx-2 max-sm:w-[270px] ">
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/مشروع</h4>
                 <h4>{project?.owner}</h4>
@@ -238,8 +238,8 @@ const Project = () => {
               </div>
             </div>
           </div>
-          <div className="w-[40%] h-full bg-blue-200 rounded shadow shadow-slate-300 p-4">
-            <div className="flex flex-col gap-2">
+          <div className="w-[40%] max-sm:w-[300px] h-full bg-blue-200 rounded shadow shadow-slate-300 p-4">
+            <div className="flex flex-col gap-2 max-sm:w-[270px] ">
               <div className="flex justify-between flex-row-reverse ">
                 {userType}
                 <div className="flex gap-4 text-2xl ">
@@ -328,7 +328,7 @@ const Project = () => {
           <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">بيانات الباند</h2>
             {project ? (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 max-sm:flex max-sm:flex-col max-sm:overflow-auto max-sm:h-[64vh]">
                 <div className="bg-yellow-600 text-white p-4 rounded-lg shadow-md">
                   <h3 className="text-lg font-bold">عدد البنود</h3>
                   {/* <p className="text-lg">{project.tasks.length}</p> */}
@@ -557,23 +557,23 @@ const Project = () => {
               <p>تفاصيل المهمة غير متوفرة.</p>
             )}
 
-            <div className="flex flex-row gap-3">
+            {/* <div className="flex flex-row gap-3 max-sm:flex-col max-sm:gap-1 my-2">
               {}
               <DropdownButton
                 name="تعين مهندس موقع"
-                buttonClassName="bg-emerald-400 text-white px-4 py-2 rounded-lg m-4"
+                buttonClassName="bg-emerald-400 text-white px-4 py-2 rounded-lg m-4 max-sm:my-0"
                 setState={handleFinish}
                 values={["Option 1", "Option 2", "Option 3"]}
               />
 
               <MultiStepForm />
               <button
-                className="bg-emerald-400 text-white px-4 py-2 rounded-lg m-4"
+                className="bg-emerald-400 text-white px-4 py-2 rounded-lg m-4 max-sm:my-0"
                 onClick={handleFinish}
               >
                 يتعين مهندس مكتبي
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
