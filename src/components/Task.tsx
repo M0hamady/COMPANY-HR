@@ -5,6 +5,7 @@ import Layout from "../utilies/Layout";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { calculateDaysToCurrentDate } from "../utilies/calcDays";
+import getInitials from "../utilies/getcharacterfromname";
 
 interface Task {
   id: number;
@@ -99,15 +100,15 @@ const Task = () => {
     <Layout>
       <div className="grid grid-rows-8 gap-4 h-[100vh] text-gray-800 font-bold">
         <div className="row-span-2 h-100 w-full  flex flex-row justify-around my-1">
-          <div className="w-[100%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 p-4 grid grid-rows-8">
+          <div className="w-[100%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 p-4 grid grid-rows-8 max-sm:w-[300px]">
             <div className="row-span-2 border-b-2 border-blue-300  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/مشروع</h4>
-                <h4>{task?.project_owner}</h4>
+                <h4>{task?.project_owner&&getInitials(task?.project_owner)}</h4>
               </div>
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/انشا بواسطة</h4>
-                <h4>{task?.project_createdBy}</h4>
+                <h4>{ task?.project_createdBy&&getInitials(task?.project_createdBy)}</h4>
               </div>
             </div>
             <div className="row-span-4  flex gap-2 flex-row-reverse  justify-between mx-2">
