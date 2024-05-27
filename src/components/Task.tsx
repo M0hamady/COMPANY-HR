@@ -32,6 +32,7 @@ const Task = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpdated, setIsUpdate] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -59,9 +60,19 @@ const Task = () => {
   const handleFinish = () => {
     // Ensure that task.id is a number and not null before dispatching
     if (typeof task?.id === "number") {
-      dispatch(assignTaskToFinish(task.id) as any);
-      // Get updated task data
-      setIsUpdate(true);
+      setIsLoading(true); // Start loading
+      dispatch(assignTaskToFinish(task.id) as any)
+        .then(() => {
+          // Handle successful completion here
+          setIsUpdate(true);
+        })
+        .catch((error: any) => {
+          // Handle any errors here
+          console.error("An error occurred:", error);
+        })
+        .finally(() => {
+          setIsLoading(false); // Stop loading regardless of outcome
+        });
     } else {
       console.error("task.id is null or not a number");
     }
@@ -104,11 +115,16 @@ const Task = () => {
             <div className="row-span-2 border-b-2 border-blue-300  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/مشروع</h4>
-                <h4>{task?.project_owner&&getInitials(task?.project_owner)}</h4>
+                <h4>
+                  {task?.project_owner && getInitials(task?.project_owner)}
+                </h4>
               </div>
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/انشا بواسطة</h4>
-                <h4>{ task?.project_createdBy&&getInitials(task?.project_createdBy)}</h4>
+                <h4>
+                  {task?.project_createdBy &&
+                    getInitials(task?.project_createdBy)}
+                </h4>
               </div>
             </div>
             <div className="row-span-4  flex gap-2 flex-row-reverse  justify-between mx-2">
@@ -245,9 +261,9 @@ const Task = () => {
                     </svg>
                   </div>
                   <div className="flex gap-6 justify-start flex-row-reverse ">
-                  <h3 className="text-lg font-bold">الإسبوع</h3>
-                  <p className="text-lg">{task.week}</p>
-                </div>
+                    <h3 className="text-lg font-bold">الإسبوع</h3>
+                    <p className="text-lg">{task.week}</p>
+                  </div>
                 </div>
                 <div className="bg-yellow-600 text-white p-4 rounded-lg shadow-md">
                   <div>
@@ -311,7 +327,7 @@ const Task = () => {
                 </div>
 
                 <div className="bg-yellow-600 text-white p-4 rounded-lg shadow-md">
-                <div>
+                  <div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -328,39 +344,45 @@ const Task = () => {
                     </svg>
                   </div>
                   <div className="flex gap-6 justify-start  flex-row-reverse">
-                  <h3 className="text-lg font-bold">تاريخ الانتهاء</h3>
-                  {task.is_finished ? (
-                    <p className="text-lg">
-                      {new Date(task.date_finished).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  ) : (
-                    <p className="text-lg">لم يتم الانتهاء بعد</p>
-                  )}
+                    <h3 className="text-lg font-bold">تاريخ الانتهاء</h3>
+                    {task.is_finished ? (
+                      <p className="text-lg">
+                        {new Date(task.date_finished).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    ) : (
+                      <p className="text-lg">لم يتم الانتهاء بعد</p>
+                    )}
+                  </div>
                 </div>
-              </div>
               </div>
             ) : (
               <p>تفاصيل المهمة غير متوفرة.</p>
             )}
             {!task?.is_finished ? (
               <button
-                className="bg-emerald-400 text-white px-4 py-2 rounded-lg m-4"
+                className={`bg-emerald-400 text-white px-4 py-2 rounded-lg m-4 ${
+                  isLoading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={handleFinish}
+                disabled={isLoading}
               >
-                انتهي
+                {isLoading ? "جاري التحميل..." : "انتهي"}
               </button>
             ) : (
               <button
                 className="bg-emerald-400 text-white px-4 py-2 rounded-lg m-4"
                 onClick={handleFinish}
+                disabled={isLoading}
+                title={isLoading ? "يرجى الاتصال بالمسؤول" : ""}
               >
-                تم انهاء الخطوة
+                  
+                {isLoading ? "اتصل بالمسؤل..." : " تم انهاء الخطوة"}
               </button>
             )}
           </div>
