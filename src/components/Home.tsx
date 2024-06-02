@@ -79,7 +79,7 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <div className="flex flex-col sm:flex-row gap-2 bg-[#071e34]">
-        <div className="p-4 flex flex-col gap-2 h-[100vh] max-sm:h-[80vh] sm:w-2/7">
+        <div className="p-4 flex flex-col gap-2 h-[100vh] max-sm:h-[80vh] sm:w-2/7  " >
           <div className=" row-span-3 ">
             <section className="mx-auto bg-[#20354b] rounded-2xl px-2 py-2 shadow-lg">
               <div className="mt-8 ">
@@ -112,18 +112,18 @@ const Home: React.FC = () => {
             ))}
           </div>
         </div>
-        <div className="p-4 flex flex-col gap-2 h-[100vh] sm:w-5/7 sm:h-[40vh]">
-          <div className=" row-span-2 text-white  flex flex-row gap-2 overflow-x-auto ">
+        <div className="p-4 flex flex-col gap-2 h-[100vh] sm:w-5/7 sm:h-[40vh] ">
+          <div className=" row-span-2 text-white  flex flex-row gap-2 overflow-x-auto  ">
             {projects.map((item, index) => (
               <ProjectCard
                 key={index}
                 item={item}
                 index={index}
-                setSelectedProjectNum={setSelectedProjectNum}
+                setSelectedProjectNum={setSelectedProjectNum} 
               />
             ))}
           </div>
-          <div className="row-span-7 text-white  flex flex-row justify-around flex-wrap gap-2 overflow-auto">
+          <div className="row-span-7 text-white  flex flex-row justify-around flex-wrap gap-2 overflow-auto absolute bottom-0 max-sm:-bottom-[80vh] h-[700px] max-sm:h-[740px]  ">
             {selectedProjectTasks.map((item, index) => (
               <Card
                 key={index}
