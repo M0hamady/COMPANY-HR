@@ -1,8 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosRequestConfig } from 'axios';
-
+// https://hrsupport.pythonanywhere.com/
+// https://hrsupport.pythonanywhere.com/
 const LOGIN_API_URL = 'https://hrsupport.pythonanywhere.com/api/login/';
 const TASKS_API_URL = 'https://hrsupport.pythonanywhere.com/api/tasks/';
+const DAILY_REPORT_API_URL = 'https://hrsupport.pythonanywhere.com/api/daily-report/';
 const PROJECTS_API_URL = 'https://hrsupport.pythonanywhere.com/api/projects/';
 
 interface LoginResponse {
@@ -67,6 +69,8 @@ export const getTasks = createAsyncThunk('tasks/getTasks', async () => {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
+      // Navigate to the login page
+      window.location.href = '/login';
       throw new Error('Token not found in localStorage');
     }
 
@@ -83,7 +87,9 @@ export const getTasks = createAsyncThunk('tasks/getTasks', async () => {
 
     return tasks;
   } catch (error) {
-    throw new Error('Failed to get tasks');
+    // Navigate to the login page
+    window.location.href = '/login';
+    throw error;
   }
 });
 
@@ -164,6 +170,107 @@ export const assignTaskToFinish = createAsyncThunk(
     }
   }
 );
+export const updateTaskFields = createAsyncThunk(
+  'tasks/updateTaskFields',
+  async (
+    { taskId, fieldName, fieldValue }: { taskId: string; fieldName: string; fieldValue: any },
+    { rejectWithValue }
+  ) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found in localStorage');
+      }
+
+      const requestConfig: AxiosRequestConfig = {
+        method: 'PUT',
+        url: `${TASKS_API_URL}${taskId}/`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          [fieldName]: fieldValue
+        }
+      };
+
+      const response = await axios.request(requestConfig);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to update the task fields');
+    }
+  }
+);
+export const updateDailyReportFields = createAsyncThunk(
+  'tasks/updateTaskFields',
+  async (
+    { dailyId, fieldName, fieldValue }: { dailyId: string; fieldName: string; fieldValue: any },
+    { rejectWithValue }
+  ) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found in localStorage');
+      }
+
+      const requestConfig: AxiosRequestConfig = {
+        method: 'PUT',
+        url: `${DAILY_REPORT_API_URL}${dailyId}/`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          [fieldName]: fieldValue
+        }
+      };
+
+      const response = await axios.request(requestConfig);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to update the task fields');
+    }
+  }
+);
+export const createDailyReportFields = createAsyncThunk(
+  'tasks/updateTaskFields',
+  async (
+    {
+      task,
+      num_of_crafts_man,
+      num_of_crafts_man_assistant,
+    }: {
+      task: number;
+      num_of_crafts_man: number;
+      num_of_crafts_man_assistant: number;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found in localStorage');
+      }
+
+      const requestConfig: AxiosRequestConfig = {
+        method: 'POST',
+        url: `${DAILY_REPORT_API_URL}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          task,
+          num_of_crafts_man,
+          num_of_crafts_man_assistant,
+        }
+      };
+
+      const response = await axios.request(requestConfig);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to update the task fields');
+    }
+  }
+);
+
 export const getExactTask = createAsyncThunk(
   'tasks/assignTaskToFinish',
   async (taskId: number | any, { rejectWithValue }) => {

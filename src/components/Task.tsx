@@ -6,6 +6,7 @@ import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { calculateDaysToCurrentDate } from "../utilies/calcDays";
 import getInitials from "../utilies/getcharacterfromname";
+import MultiStepForm from "./steps_modal/MultiStepForm";
 
 interface Task {
   id: number;
@@ -16,12 +17,20 @@ interface Task {
   project_officeEng: string | null;
   title: string;
   week: string;
+  attendance_status_ar: string;
   description: string | null;
   is_finished: boolean;
+  is_there_problem: boolean;
+  is_attended: boolean;
   date_finished: string;
   date_created: string;
+  buttonName: string;
   date_updated: string;
   employee: string | null;
+  num_of_crafts_man: number;
+  num_of_crafts_man_assistant: number;
+  buttonStatus: number;
+  daily_report_lat_id:number
 }
 
 const Task = () => {
@@ -110,8 +119,8 @@ const Task = () => {
   return (
     <Layout>
       <div className="grid grid-rows-8 gap-4 h-[100vh] text-gray-800 font-bold">
-        <div className="row-span-2 h-100 w-full  flex flex-row justify-around my-1">
-          <div className="w-[100%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 p-4 grid grid-rows-8 max-sm:w-[300px]">
+        <div className="row-span-3 h-100 w-full  flex flex-row justify-around my-1">
+          <div className="w-[100%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 py-4 px-1 grid grid-rows-8 max-sm:w-[300px]">
             <div className="row-span-2 border-b-2 border-blue-300  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/مشروع</h4>
@@ -159,6 +168,51 @@ const Task = () => {
                 </svg>
               </div>
             </div>
+            <div className="row-span-4  flex gap-2 flex-row-reverse  justify-between mx-2">
+              <div className="row-span-2  flex gap-2 flex-row-reverse ">
+                <h6 className="text-sm text-red-900">
+                  {task ? task.title : null}
+                </h6>{" "}
+              </div>
+              <div className="row-span-2  flex gap-2 flex-row-reverse "></div>
+            </div>
+            <div className="row-span-4  flex gap-5 flex-row-reverse mx-2">
+              <div className="row-span-2  flex gap-2 flex-row-reverse ">
+                <h6 className="text-sm text-gray-900">
+                الصنايعية:  {task ? task.num_of_crafts_man : null}
+                </h6>{" "}
+              </div>
+              <div className="row-span-2  flex gap-2 flex-row-reverse ">
+              <h6 className="text-sm text-gray-900">
+                المساعدين:  {task ? task.num_of_crafts_man_assistant : null}
+                </h6>{" "}
+              </div>
+            </div>
+            <div className="row-span-4  flex gap-2 flex-row-reverse   ">
+              <div className="  flex gap-2 flex-row-reverse w-full text-sm text-yellow-700 ">
+                <h4>:موقف التسجيل</h4>
+                <h4>{task?.attendance_status_ar}</h4>
+              </div>
+            </div>
+            <div className="  flex gap-2 flex-row-reverse ">
+              {task?.buttonStatus && 
+                <>
+                  <MultiStepForm
+                    setIsUpdate={setIsUpdate}
+                    buttonName={task?.buttonName}
+                    setTask={setTask}
+                    isUpdated={isUpdated}
+                    last_daily_id={task.daily_report_lat_id}
+                    buttonStatus={task.buttonStatus}
+                    taskId={task.id}
+                    num_of_crafts_man={task.num_of_crafts_man}
+                    num_of_crafts_man_assistant={
+                      task.num_of_crafts_man_assistant
+                    }
+                  />
+                </>
+              }
+            </div>
             <div className="row-span-2  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2  flex gap-2 flex-row-reverse ">
                 <h4>/مضي</h4>
@@ -184,7 +238,7 @@ const Task = () => {
           </div>
           {/* <div className="w-[40%] h-full bg-blue-200 rounded shadow shadow-slate-300 p-4"></div> */}
         </div>
-        <div className="row-span-6 h-100 w-full ">
+        <div className="row-span-5 h-100 w-full ">
           <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">بيانات الباند</h2>
             {task ? (
@@ -381,7 +435,6 @@ const Task = () => {
                 disabled={isLoading}
                 title={isLoading ? "يرجى الاتصال بالمسؤول" : ""}
               >
-                  
                 {isLoading ? "اتصل بالمسؤل..." : " تم انهاء الخطوة"}
               </button>
             )}

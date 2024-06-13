@@ -5,7 +5,7 @@ import React, { ChangeEvent } from "react";
 interface Step3Props {
   formData: FormData;
   onFormDataChange: (data: FormData) => void;
-  onSubmit: () => void;
+  onSubmit: (e:any) => void;
   onPrevious: () => void;
 }
 
@@ -21,13 +21,8 @@ const Step3: React.FC<Step3Props> = ({ formData, onFormDataChange, onSubmit, onP
 
   return (
     <div>
-      <h3>Step 3</h3>
-      <input
-        type="text"
-        name="field3"
-        value={formData.field3 || ""}
-        onChange={handleInputChange}
-      />
+      <h3 className="text-red-900">التاكيد</h3>
+      <h4 className="text-sm">يمكنك التاكيد لتسجيل التعديل او الرجوع للتاكد من تعديلاتك</h4>
       {/* <button onClick={onPrevious}>Previous</button> */}
       {/* <button onClick={onSubmit}>Submit</button> */}
     </div>

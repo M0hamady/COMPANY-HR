@@ -12,7 +12,6 @@ import { calculateDaysToCurrentDate } from "../utilies/calcDays";
 import { RootState } from "../store/reducers";
 import DropdownButton from "../utilies/DropDownButton";
 import Modal from "../utilies/MoModal";
-import MultiStepForm from "./steps_modal/MultiStepForm";
 
 interface Project {
   id: number;

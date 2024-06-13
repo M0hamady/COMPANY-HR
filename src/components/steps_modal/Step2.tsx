@@ -19,11 +19,11 @@ const Step2: React.FC<Step2Props> = ({ formData, onFormDataChange, onNext, onPre
 
   return (
     <div>
-      <h3>Step 2</h3>
+      <h3>تحديد عدد المساعدين</h3>
       <input
-        type="text"
+        type="number"
         name="field2"
-        value={formData.field2 || ""}
+        value={formData.field2 || 0 }
         onChange={handleInputChange}
       />
       {/* <button onClick={onPrevious}>Previous</button> */}
