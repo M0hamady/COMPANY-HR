@@ -1,12 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosRequestConfig } from 'axios';
-// https://hrsupport.pythonanywhere.com/
-// https://hrsupport.pythonanywhere.com/
-const LOGIN_API_URL = 'https://hrsupport.pythonanywhere.com/api/login/';
-const TASKS_API_URL = 'https://hrsupport.pythonanywhere.com/api/tasks/';
-const DAILY_REPORT_API_URL = 'https://hrsupport.pythonanywhere.com/api/daily-report/';
-const PROJECTS_API_URL = 'https://hrsupport.pythonanywhere.com/api/projects/';
-
+// http://127.0.0.1:8000/
+// http://127.0.0.1:8000/
+const LOGIN_API_URL = 'http://127.0.0.1:8000/api/login/';
+const TASKS_API_URL = 'http://127.0.0.1:8000/api/tasks/';
+const DAILY_REPORT_API_URL = 'http://127.0.0.1:8000/api/daily-report/';
+const TASK_PROBLEM_API_URL = 'http://127.0.0.1:8000/api/task-problem/';
+const PROJECTS_API_URL = 'http://127.0.0.1:8000/api/projects/';
+// Define the type for the payload
+interface TaskProblemFieldsPayload {
+  taskProblemId?: number; // Optional: ID of the task problem to update
+  task: number;
+  degree_of_problem: string;
+  text: string;
+}
 interface LoginResponse {
   token: string;
   username: string;
@@ -230,6 +237,63 @@ export const updateDailyReportFields = createAsyncThunk(
     }
   }
 );
+
+export const updateOrCreateTaskProblemFields = createAsyncThunk(
+  'tasks/updateOrCreateTaskProblemFields',
+  async (
+    {
+      taskProblemId,
+      task,
+      degree_of_problem,
+      text,
+    }: TaskProblemFieldsPayload,
+    { rejectWithValue }
+  ) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found in localStorage');
+      }
+
+      let requestConfig: AxiosRequestConfig;
+      if (taskProblemId) {
+        // If taskProblemId is provided, update an existing task problem
+        requestConfig = {
+          method: 'PUT', // Adjust the HTTP method for update
+          url: `${TASK_PROBLEM_API_URL}/${taskProblemId}`, // Append taskProblemId to the URL for update
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          data: {
+            task,
+            degree_of_problem,
+            text,
+          }
+        };
+      } else {
+        // If taskProblemId is not provided, create a new task problem
+        requestConfig = {
+          method: 'POST', // Adjust the HTTP method for create
+          url: `${TASK_PROBLEM_API_URL}`, // Adjust the API endpoint for create
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          data: {
+            task,
+            degree_of_problem,
+            text,
+          }
+        };
+      }
+
+      const response = await axios.request(requestConfig);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to update/create the task problem fields');
+    }
+  }
+);
+
 export const createDailyReportFields = createAsyncThunk(
   'tasks/updateTaskFields',
   async (

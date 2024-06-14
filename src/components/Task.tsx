@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { calculateDaysToCurrentDate } from "../utilies/calcDays";
 import getInitials from "../utilies/getcharacterfromname";
 import MultiStepForm from "./steps_modal/MultiStepForm";
+import ReportIssue from "../utilies/ReportIssue";
 
 interface Task {
   id: number;
@@ -196,7 +197,7 @@ const Task = () => {
             </div>
             <div className="  flex gap-2 flex-row-reverse ">
               {task?.buttonStatus && 
-                <>
+                <div className="flex justify-between flex-row-reverse w-full">
                   <MultiStepForm
                     setIsUpdate={setIsUpdate}
                     buttonName={task?.buttonName}
@@ -210,7 +211,8 @@ const Task = () => {
                       task.num_of_crafts_man_assistant
                     }
                   />
-                </>
+                  <ReportIssue taskId={task.id} />
+                </div>
               }
             </div>
             <div className="row-span-2  flex gap-2 flex-row-reverse  justify-between mx-2">
