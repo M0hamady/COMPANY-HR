@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosRequestConfig } from 'axios';
-// http://127.0.0.1:8000/
-// http://127.0.0.1:8000/
-const LOGIN_API_URL = 'http://127.0.0.1:8000/api/login/';
-const TASKS_API_URL = 'http://127.0.0.1:8000/api/tasks/';
-const DAILY_REPORT_API_URL = 'http://127.0.0.1:8000/api/daily-report/';
-const TASK_PROBLEM_API_URL = 'http://127.0.0.1:8000/api/task-problem/';
-const PROJECTS_API_URL = 'http://127.0.0.1:8000/api/projects/';
+// https://hrsupport.pythonanywhere.com/
+// https://hrsupport.pythonanywhere.com/
+const LOGIN_API_URL = 'https://hrsupport.pythonanywhere.com/api/login/';
+const TASKS_API_URL = 'https://hrsupport.pythonanywhere.com/api/tasks/';
+const DAILY_REPORT_API_URL = 'https://hrsupport.pythonanywhere.com/api/daily-report/';
+const TASK_PROBLEM_API_URL = 'https://hrsupport.pythonanywhere.com/api/task-problem/';
+const PROJECTS_API_URL = 'https://hrsupport.pythonanywhere.com/api/projects/';
 // Define the type for the payload
 interface TaskProblemFieldsPayload {
   taskProblemId?: number; // Optional: ID of the task problem to update
