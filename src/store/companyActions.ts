@@ -104,6 +104,7 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('loginResponse', JSON.stringify(response.data));
       localStorage.setItem('token', responseData.token);
       localStorage.setItem('userType', responseData.userType);
+      window.location.href = '/'
 
       return { ...responseData, username, email: responseData.email };
     } catch (error) {
