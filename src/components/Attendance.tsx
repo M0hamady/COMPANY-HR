@@ -37,7 +37,7 @@ const AttendanceComponent: React.FC = () => {
       const now = new Date();
       const formattedDateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
       setCurrentDateTime(formattedDateTime);
-    }, 1000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);
