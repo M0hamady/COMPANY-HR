@@ -109,7 +109,7 @@ const Project = () => {
     const delay = setTimeout(() => {
       fetchTask();
       setIsUpdate(false);
-    }60000); // Fetch task after 1 second
+    }, 30000); // Fetch task after 1 second
 
     return () => {
       clearTimeout(delay); // Cleanup the timeout when the component is unmounted

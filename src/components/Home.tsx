@@ -51,7 +51,7 @@ const Home: React.FC = () => {
     handleTasks();
     const interval = setInterval(() => {
       handleTasks();
-    }, 30000); // Run every second (1000 milliseconds)
+    }, 3000); // Run every second (1000 milliseconds)
 
     return () => {
       clearInterval(interval); // Clean up the interval on component unmount
