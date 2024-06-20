@@ -138,7 +138,7 @@ export const getTasks = createAsyncThunk('tasks/getTasks', async () => {
     return tasks;
   } catch (error) {
     // Navigate to the login page
-    window.location.href = '/login';
+    // window.location.href = '/login';
     throw error;
   }
 });
@@ -447,7 +447,7 @@ export const getAttendance = createAsyncThunk('attendance/getAttendance', async 
     return attendance;
   } catch (error) {
     // Navigate to the login page
-    window.location.href = '/login';
+    // window.location.href = '/login';
     throw error;
   }
 });
