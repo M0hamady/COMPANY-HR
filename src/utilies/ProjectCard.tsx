@@ -20,7 +20,7 @@ export const ProjectCard: React.FC<CardProps> = ({
     <div className="w-[420px] min-w-[180px] h-100 py-2 px-2 bg-[#20354b] rounded-2xl shadow-lg grid grid-flow-row">
       <div className=" flex flex-row-reverse items-center justify-start gap-3 px-2 text-right ">
         <div>/مشروع </div>
-        <div>{getInitials(item.owner)}</div>
+        <div>{item.owner}</div>
       </div>
       <div className=" flex flex-col justify-end text-right gap-1">
         <div className="flex flex-row-reverse gap-2">

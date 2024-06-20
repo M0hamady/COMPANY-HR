@@ -75,14 +75,14 @@ const Task = () => {
 
   useEffect(() => {
  fetchTask()
- ,[] })
+  },[1])
   useEffect(() => {
  
 
     const delay = setTimeout(() => {
       fetchTask();
       setIsUpdate(false);
-    }, 120000); // Fetch task after 1 second
+    }, 1200000); // Fetch task after 1 second
 
     return () => {
       clearTimeout(delay); // Cleanup the timeout when the component is unmounted
