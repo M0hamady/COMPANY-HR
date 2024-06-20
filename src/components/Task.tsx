@@ -75,7 +75,7 @@ const Task = () => {
 
   useEffect(() => {
  fetchTask()
-  })
+ ,[] })
   useEffect(() => {
  
 
