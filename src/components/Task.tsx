@@ -61,24 +61,28 @@ const Task = () => {
   const [error, setError] = useState<string | null>(null);
   const [isUpdated, setIsUpdate] = useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const fetchTask = async () => {
+    try {
+      const data: any = await dispatch(getExactTask(id) as any);
+      console.log(data);
+      setTask(data.payload); // Set the task data from the payload
+      setLoading(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred"); // More robust error handling
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchTask = async () => {
-      try {
-        const data: any = await dispatch(getExactTask(id) as any);
-        console.log(data);
-        setTask(data.payload); // Set the task data from the payload
-        setLoading(false);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred"); // More robust error handling
-        setLoading(false);
-      }
-    };
+ fetchTask()
+  })
+  useEffect(() => {
+ 
 
     const delay = setTimeout(() => {
       fetchTask();
       setIsUpdate(false);
-    }, 12000); // Fetch task after 1 second
+    }, 120000); // Fetch task after 1 second
 
     return () => {
       clearTimeout(delay); // Cleanup the timeout when the component is unmounted
