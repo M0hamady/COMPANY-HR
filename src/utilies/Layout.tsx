@@ -2,6 +2,7 @@ import React, { useState, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { logout } from "../store/companyActions";
 import { useDispatch } from "react-redux";
+import { FaSchoolCircleCheck } from "react-icons/fa6";
 
 interface LayoutProps {
   children: ReactNode;
@@ -29,7 +30,7 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="flex flex-row bg-blue-950 h-[100% !important]  text-white">
       <div
         className={
-          "hover:w-[100px] w-[50px] flex flex-col transition-all duration-300 shadow-2xl shadow-slate-500 drop-shadow-lg  py-4  justify-between align-middle"
+          "hover:w-[100px] w-[50px] flex flex-col transition-all duration-300 shadow-2xl shadow-slate-500 drop-shadow-lg  py-4  justify-between align-middle min-h-[96vh] "
         }
       >
         <div className="flex flex-col gap-4 justify-center items-center h-50 w-100 ">
@@ -65,21 +66,9 @@ const Layout = ({ children }: LayoutProps) => {
               />
             </svg>
           </Link>
-          <Link to={"/"} className="hover:bg-[#090b1a] hover:shadow-lg hover:translate-x-1 p-2 w-full my-class flex justify-center duration-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-              />
-            </svg>
+          <Link to={"/attendance"} className="hover:bg-[#090b1a] hover:shadow-lg hover:translate-x-1 p-2 w-full my-class flex justify-center duration-300">
+          <FaSchoolCircleCheck />
+
           </Link>
         </div>
         <div className="flex flex-col gap-4 justify-center items-center h-50">

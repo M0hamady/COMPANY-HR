@@ -1,23 +1,65 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosRequestConfig } from 'axios';
-// https://hrsupport.pythonanywhere.com/
-// https://hrsupport.pythonanywhere.com/
-const LOGIN_API_URL = 'https://hrsupport.pythonanywhere.com/api/login/';
-const TASKS_API_URL = 'https://hrsupport.pythonanywhere.com/api/tasks/';
-const DAILY_REPORT_API_URL = 'https://hrsupport.pythonanywhere.com/api/daily-report/';
-const TASK_PROBLEM_API_URL = 'https://hrsupport.pythonanywhere.com/api/task-problem/';
-const PROJECTS_API_URL = 'https://hrsupport.pythonanywhere.com/api/projects/';
+// http://127.0.0.1:8000/
+// http://127.0.0.1:8000/
+const LOGIN_API_URL = 'http://127.0.0.1:8000/api/login/';
+const TASKS_API_URL = 'http://127.0.0.1:8000/api/tasks/';
+const DAILY_REPORT_API_URL = 'http://127.0.0.1:8000/api/daily-report/';
+const TASK_PROBLEM_API_URL = 'http://127.0.0.1:8000/api/task-problem/';
+const PROJECTS_API_URL = 'http://127.0.0.1:8000/api/projects/';
+const ATTENDANCE_API_URL = 'http://127.0.0.1:8000/api/attendance/';
+
 // Define the type for the payload
 interface TaskProblemFieldsPayload {
   taskProblemId?: number; // Optional: ID of the task problem to update
   task: number;
   degree_of_problem: string;
   text: string;
+  is_solved:Boolean
+}
+export interface Attendance2 {
+  employee: string | null;
+  id: number;
+  // date: Date | null;
+  check_in: Date |  string | null;
+  check_out: Date | null;
+  latitude: number | null;
+  longitude: number | null;
+  duration: number | null; // Duration in seconds
+  user: number | null; // ID of the user
+}
+export interface Attendance {
+  id: number;
+  // date: Date | null;
+  check_in: Date |  string | null;
+  check_out: Date | null;
+  latitude: number | null;
+  longitude: number | null;
+  duration: number | null; // Duration in seconds
+  user: number | null; // ID of the user
+}
+
+export interface TodayAttendance {
+  userName: string | null;
+  check_in: Date | string | null;
+  checkInLocation: {
+    latitude: number | null;
+    longitude: number | null;
+    googleMapsLink: string | null;
+  };
+  check_out?: Date | string | null;
+  checkOutLocation?: {
+    latitude: number | null;
+    longitude: number | null;
+    googleMapsLink: string | null;
+  };
+  totalDuration?: number | null; // in seconds
 }
 interface LoginResponse {
   token: string;
   username: string;
   email: string;
+  userType: string;
 }
 interface Task {
   id: number;
@@ -61,6 +103,7 @@ export const loginUser = createAsyncThunk(
       const responseData: LoginResponse = response.data;
       localStorage.setItem('loginResponse', JSON.stringify(response.data));
       localStorage.setItem('token', responseData.token);
+      localStorage.setItem('userType', responseData.userType);
 
       return { ...responseData, username, email: responseData.email };
     } catch (error) {
@@ -246,6 +289,7 @@ export const updateOrCreateTaskProblemFields = createAsyncThunk(
       task,
       degree_of_problem,
       text,
+      is_solved,
     }: TaskProblemFieldsPayload,
     { rejectWithValue }
   ) => {
@@ -260,7 +304,7 @@ export const updateOrCreateTaskProblemFields = createAsyncThunk(
         // If taskProblemId is provided, update an existing task problem
         requestConfig = {
           method: 'PUT', // Adjust the HTTP method for update
-          url: `${TASK_PROBLEM_API_URL}/${taskProblemId}`, // Append taskProblemId to the URL for update
+          url: `${TASK_PROBLEM_API_URL}${taskProblemId}/`, // Append taskProblemId to the URL for update
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -268,6 +312,7 @@ export const updateOrCreateTaskProblemFields = createAsyncThunk(
             task,
             degree_of_problem,
             text,
+            is_solved,
           }
         };
       } else {
@@ -373,5 +418,121 @@ export const logout = createAsyncThunk('auth/logout', async () => {
     return 'Logout successful';
   } catch (error) {
     throw new Error('Failed to log out');
+  }
+});
+
+
+
+// Async Thunk for getting attendance data
+export const getAttendance = createAsyncThunk('attendance/getAttendance', async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Navigate to the login page
+      window.location.href = '/login';
+      throw new Error('Token not found in localStorage');
+    }
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'GET',
+      url: ATTENDANCE_API_URL,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const response = await axios.request(requestConfig);
+    const attendance: Attendance[] = response.data;
+
+    return attendance;
+  } catch (error) {
+    // Navigate to the login page
+    window.location.href = '/login';
+    throw error;
+  }
+});
+
+// Async Thunk for posting attendance data
+export const postAttendance = createAsyncThunk('attendance/postAttendance', async (attendanceData: Attendance & { latitude: number | null, longitude : number | null }) => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Navigate to the login page
+      window.location.href = '/login';
+      throw new Error('Token not found in localStorage');
+    }
+
+    const requestConfig: AxiosRequestConfig = {
+      method: 'POST',
+      url: ATTENDANCE_API_URL,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        ...attendanceData,
+        latitude: attendanceData.latitude,
+        longitude: attendanceData.longitude
+      }
+    };
+
+    const response = await axios.request(requestConfig);
+    const newAttendance: Attendance = response.data;
+
+    return newAttendance;
+  } catch (error) {
+    // Navigate to the login page
+    throw error;
+  }
+});
+
+
+export const getTodayAttendance = createAsyncThunk('attendance/getTodayAttendance', async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Navigate to the login page
+      window.location.href = '/login';
+      throw new Error('Token not found in localStorage');
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    const requestConfig: AxiosRequestConfig = {
+      method: 'GET',
+      url: `${ATTENDANCE_API_URL}?date=${today}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const response = await axios.request(requestConfig);
+    const attendance: Attendance2[] = response.data;
+
+    const todayAttendance: TodayAttendance[] = attendance.map((item) => ({
+      userName: `${item.employee}` || null ,
+      check_in: item.check_in || null,
+      checkInLocation: {
+        latitude: item.latitude || null,
+        longitude: item.longitude || null,
+        googleMapsLink: item.check_in
+          ? `https://www.google.com/maps?q=${item.latitude},${item.longitude}`
+          : null
+      },
+      check_out: item.check_out || null,
+      checkOutLocation: item.check_out
+        ? {
+            latitude: item.latitude || null,
+            longitude: item.longitude || null,
+            googleMapsLink: `https://www.google.com/maps?q=${item.latitude},${item.longitude}`
+          }
+        : undefined,
+      totalDuration: item.duration || null
+    }));
+
+    return todayAttendance;
+  } catch (error) {
+    // Navigate to the login page
+    // window.location.href = '/login';
+    throw error;
   }
 });

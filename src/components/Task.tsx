@@ -8,6 +8,7 @@ import { calculateDaysToCurrentDate } from "../utilies/calcDays";
 import getInitials from "../utilies/getcharacterfromname";
 import MultiStepForm from "./steps_modal/MultiStepForm";
 import ReportIssue from "../utilies/ReportIssue";
+import ProblemCard from "../utilies/Problems";
 
 interface Task {
   id: number;
@@ -31,7 +32,24 @@ interface Task {
   num_of_crafts_man: number;
   num_of_crafts_man_assistant: number;
   buttonStatus: number;
-  daily_report_lat_id:number
+  daily_report_lat_id: number;
+
+  problems: Problem[];
+}
+
+interface Problem {
+  id: number;
+  text: string;
+  is_solved: boolean;
+  date_created: string;
+  date_solved: string | null;
+  degree_of_problem: string;
+  is_sent_to_head_eng: boolean;
+  date_sent_to_head_eng: string | null;
+  is_sent_to_manager: boolean;
+  date_sent_to_manager: string | null;
+  task: number;
+  solved_by: string | null;
 }
 
 const Task = () => {
@@ -60,12 +78,12 @@ const Task = () => {
     const delay = setTimeout(() => {
       fetchTask();
       setIsUpdate(false);
-    }, 6000); // Fetch task after 1 second
+    }, 1000); // Fetch task after 1 second
 
     return () => {
       clearTimeout(delay); // Cleanup the timeout when the component is unmounted
     };
-  }, [id, isUpdated]);
+  }, [task]);
 
   const handleFinish = () => {
     // Ensure that task.id is a number and not null before dispatching
@@ -119,9 +137,9 @@ const Task = () => {
 
   return (
     <Layout>
-      <div className="grid grid-rows-8 gap-4 h-[100vh] text-gray-800 font-bold">
-        <div className="row-span-3 h-100 w-full  flex flex-row justify-around my-1">
-          <div className="w-[100%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 py-4 px-1 grid grid-rows-8 max-sm:w-[300px]">
+      <div className="grid grid-rows-8 gap-4 h-[140vh] text-gray-800 font-bold">
+        <div className="row-span-3 h-full w-full  flex flex-row justify-around my-1">
+          <div className="w-[100%] h-full gap-1 bg-blue-200 rounded shadow shadow-slate-300 py-4 px-1 grid grid-rows-12 max-sm:w-[300px]">
             <div className="row-span-2 border-b-2 border-blue-300  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2   flex gap-2 flex-row-reverse ">
                 <h4>/مشروع</h4>
@@ -170,6 +188,9 @@ const Task = () => {
               </div>
             </div>
             <div className="row-span-4  flex gap-2 flex-row-reverse  justify-between mx-2">
+            {task && <ProblemCard problems={task.problems}  />}
+            </div>
+            <div className="row-span-4  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2  flex gap-2 flex-row-reverse ">
                 <h6 className="text-sm text-red-900">
                   {task ? task.title : null}
@@ -180,12 +201,12 @@ const Task = () => {
             <div className="row-span-4  flex gap-5 flex-row-reverse mx-2">
               <div className="row-span-2  flex gap-2 flex-row-reverse ">
                 <h6 className="text-sm text-gray-900">
-                الصنايعية:  {task ? task.num_of_crafts_man : null}
+                  الصنايعية: {task ? task.num_of_crafts_man : null}
                 </h6>{" "}
               </div>
               <div className="row-span-2  flex gap-2 flex-row-reverse ">
-              <h6 className="text-sm text-gray-900">
-                المساعدين:  {task ? task.num_of_crafts_man_assistant : null}
+                <h6 className="text-sm text-gray-900">
+                  المساعدين: {task ? task.num_of_crafts_man_assistant : null}
                 </h6>{" "}
               </div>
             </div>
@@ -196,7 +217,7 @@ const Task = () => {
               </div>
             </div>
             <div className="  flex gap-2 flex-row-reverse ">
-              {task?.buttonStatus && 
+              {task?.buttonStatus && (
                 <div className="flex justify-between flex-row-reverse w-full">
                   <MultiStepForm
                     setIsUpdate={setIsUpdate}
@@ -213,7 +234,7 @@ const Task = () => {
                   />
                   <ReportIssue taskId={task.id} />
                 </div>
-              }
+              )}
             </div>
             <div className="row-span-2  flex gap-2 flex-row-reverse  justify-between mx-2">
               <div className="row-span-2  flex gap-2 flex-row-reverse ">

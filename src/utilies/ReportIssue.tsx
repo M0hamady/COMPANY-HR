@@ -10,6 +10,7 @@ interface ReportIssueProps {
   
   const ReportIssue: React.FC<ReportIssueProps> = ({ taskId }) => {  const [isModalOpen, setIsModalOpen] = useState(false);
   const [degree_of_problem, setdegree_of_problem] = useState("");
+  const [is_solved, setIS_solved] = useState(false);
   const [text, settext] = useState("");
   const dispatch: ThunkDispatch<any, undefined, AnyAction> = useDispatch();
 
@@ -29,7 +30,8 @@ interface ReportIssueProps {
     dispatch(updateOrCreateTaskProblemFields({
       task: taskId, // Replace with the actual task ID
       degree_of_problem,
-      text
+      text,
+      is_solved,
     }));
 
     // Logic to send the report with the degree_of_problem and text
