@@ -37,7 +37,7 @@ const AttendanceComponent: React.FC = () => {
       const now = new Date();
       const formattedDateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
       setCurrentDateTime(formattedDateTime);
-    }, 6000);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -75,7 +75,7 @@ const AttendanceComponent: React.FC = () => {
     const interval = setInterval(() => {
       handleAttendanceData();
       handleAttendanceDataEmployee();
-    }, 3000);
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
