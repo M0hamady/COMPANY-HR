@@ -1,4 +1,3 @@
-// Login.tsx
 import React, { useState, FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { AnyAction } from 'redux';
@@ -15,9 +14,11 @@ const Login: React.FC<LoginProps> = () => {
   const dispatch: ThunkDispatch<any, undefined, AnyAction> = useDispatch();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const data:any = await dispatch(loginUser({ username: email, password }));
       dispatch({
@@ -28,7 +29,6 @@ const Login: React.FC<LoginProps> = () => {
         },
       });
     } catch (error) {
-      // console.log('ee');
       toast.error('اسم المستخدم او كلمة المرور غير صحيح', {
         position: "top-center",
         autoClose: 5000,
@@ -38,7 +38,8 @@ const Login: React.FC<LoginProps> = () => {
         draggable: true,
         progress: undefined,
       });
-      // Handle login error
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,8 +77,9 @@ const Login: React.FC<LoginProps> = () => {
           <button
             type="submit"
             className="w-full btn btn-success bg-green-200 text-black font-bold py-2 px-4 rounded-md hover:bg-primary-dark"
+            disabled={isLoading}
           >
-            تسجيل اللدخول
+            {isLoading ? 'Loading...' : 'تسجيل اللدخول'}
           </button>
         </form>
       </div>
