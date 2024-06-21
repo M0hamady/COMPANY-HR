@@ -123,7 +123,7 @@ const Home: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="p-4 flex flex-col gap-2 h-[100vh]  sm:w-5/7 sm:h-[40vh] max-w-[66vw] ">
+      <div className="p-4 flex flex-col gap-2 h-[100vh]  sm:w-5/7 sm:h-[40vh] max-w-[66vw] max-sm:max-w-[99vw] ">
         <div className=" row-span-2 text-white  flex flex-row gap-2 overflow-auto w-full  ">
           {projects.map((item, index) => (
             <ProjectCard
