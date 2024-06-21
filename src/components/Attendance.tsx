@@ -75,7 +75,7 @@ const AttendanceComponent: React.FC = () => {
     const interval = setInterval(() => {
       handleAttendanceData();
       handleAttendanceDataEmployee();
-    }, 30000);
+    }, 60000);
     return () => clearInterval(interval);
   }, []);
 

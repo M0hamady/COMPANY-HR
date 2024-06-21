@@ -9,6 +9,7 @@ import getInitials from "../utilies/getcharacterfromname";
 import MultiStepForm from "./steps_modal/MultiStepForm";
 import ReportIssue from "../utilies/ReportIssue";
 import ProblemCard from "../utilies/Problems";
+import Loading from "../utilies/LoadingComponent";
 
 interface Task {
   id: number;
@@ -113,17 +114,7 @@ const Task = () => {
   if (loading) {
     return (
       <Layout>
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">... </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-300 h-4"></div>
-            <div className="bg-gray-300 h-4"></div>
-            <div className="bg-gray-300 h-4"></div>
-            <div className="bg-gray-300 h-4"></div>
-            <div className="bg-gray-300 h-4"></div>
-            <div className="bg-gray-300 h-4"></div>
-          </div>
-        </div>
+        <Loading />
       </Layout>
     );
   }
