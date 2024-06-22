@@ -9,49 +9,40 @@ interface CardProps {
   setCountUpdates: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-export interface item_type {
-  item: {
-    id: number;
-    user: string;
-    project_owner: string;
-    title: string;
-    description: string;
-    is_finished: boolean;
-    date_finished: string | null;
-    date_created: string;
-    date_updated: string | null;
-    week: number;
-    employee: string | null;
-  };
-  index: number;
-}
-
-// Function to handle the restart action
-const handleRestart = () => {
-  // Logic to restart the work on the item
-};
 export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
   const dispatch = useDispatch();
-  const [isFinishing, setIsFinishing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [updatedItem, setUpdatedItem] = useState<any>(item); // State to hold the updated item
 
   const handleFinish = async () => {
-    setIsFinishing(true);
+    setLoading(true);
     try {
-      // Ensure that item.id is a number and not null before dispatching
       if (typeof item.id === "number") {
-        await dispatch(assignTaskToFinish(item.id) as any);
-        setCountUpdates(item.id);
+        const response = await dispatch(assignTaskToFinish(item.id) as any);
+        // Assuming response contains updated item data
+        if (response && response.payload) {
+
+          setUpdatedItem(response.payload); // Update state with response data
+          console.log(updatedItem.is_finished);
+          setCountUpdates(item.id);
+        }
       } else {
         console.error("item.id is null or not a number");
       }
     } catch (error) {
       console.error("Error finishing the step:", error);
     } finally {
-      setIsFinishing(false);
+      setLoading(false);
     }
   };
+
+  // Function to handle restart action
+  const handleRestart = () => {
+    // Logic to restart the work on the item
+  };
+
   return (
-    <div className="w-full max-w-[400px] h-fit py-2 px-2 bg-[#20354b] rounded-2xl shadow-lg grid grid-flow-row">
+<div className="w-full max-w-[400px] h-fit py-2 px-2 bg-[#20354b] rounded-2xl shadow-lg grid grid-flow-row">
       <div className=" flex flex-row-reverse items-center justify-start gap-3 px-2 ">
         <div>/العميل</div>
         <div>{item.user}</div>
@@ -77,7 +68,7 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
         </div>
       </div>
       <div className=" flex  flex-row-reverse items-center justify-between px-2 py-2">
-        {item.is_finished ? (
+        {updatedItem.is_finished ? (
           <div>
             <button
               className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
@@ -91,14 +82,15 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
             <button
               className="bg-red-800 text-white px-4 py-2 rounded-lg"
               onClick={handleFinish}
+              disabled={loading}
             >
-              {isFinishing ? "جاري انهاء الخطوة" : "قم بانهاء الخطوة"}
+              {loading ? "جاري انهاء الخطوة" : "قم بانهاء الخطوة"}
             </button>
           </div>
         )}
 
         <Link
-        to={`task/${item.id}`}
+          to={`task/${updatedItem.id}`}
           className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
           onClick={handleRestart}
         >

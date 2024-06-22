@@ -291,6 +291,23 @@ code {
   border-radius: 6px;
   padding: 0 2px;
 }
+/* Define the animation */
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/* Apply animation to the button */
+.animate-fade {
+  animation: fade 0.5s ease-in-out;
+}
+
+
+
 .scrollbar-hide {
   max-height: 90vh; /* Limit height */
   overflow-y: auto; /* Enable vertical scrolling */
