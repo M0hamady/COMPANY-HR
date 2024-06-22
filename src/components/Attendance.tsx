@@ -20,6 +20,7 @@ const AttendanceComponent: React.FC = () => {
     "checked-in" | "checked-out" | null
   >(null);
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const dispatch: ThunkDispatch<any, undefined, AnyAction> = useDispatch();
   const [attendanceData, setAttendanceData] = useState<Attendance[]>([]); // State to hold attendance data
   const [lastAttendanceData, setLastAttendanceData] =
@@ -32,7 +33,17 @@ const AttendanceComponent: React.FC = () => {
   if (cachedResponseJson) {
     cachedResponse = JSON.parse(cachedResponseJson);
   }
-  useEffect(() => {
+    
+    useEffect(() => {
+      const interval = setInterval(() => {
+       setError('')
+      }, 3000);
+  
+      return () => clearInterval(interval);
+    }, []);
+
+
+    useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
       const formattedDateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
@@ -56,6 +67,7 @@ const AttendanceComponent: React.FC = () => {
         }
       } else {
         // Handle error case, such as unauthorized access or other errors
+        setError("error while handling attendance date")
         console.error(response.error.message);
       }
     });
@@ -121,6 +133,7 @@ const AttendanceComponent: React.FC = () => {
       );
       setAttendanceStatus("checked-in");
     } catch (error) {
+      setError("error while handling check in ")
       console.error("Error checking in:", error);
     }
   };
@@ -143,6 +156,7 @@ const AttendanceComponent: React.FC = () => {
       );
       setAttendanceStatus("checked-out");
     } catch (error) {
+      setError("error while handling check out ")
       console.error("Error checking out:", error);
     }
   };
@@ -156,7 +170,21 @@ const AttendanceComponent: React.FC = () => {
 
   return (
     <Layout>
+      {error && 
+      <div className="w-full md:w-1/3 mx-auto">
+      <div className="flex p-5 rounded-lg shadow bg-white">
+      <div>
+        <svg className="w-6 h-6 fill-current text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg>
+      </div>
+      <div className="ml-3">
+        <h2 className="font-semibold text-gray-800">Warning Alert Title</h2>
+        <p className="mt-2 text-sm text-gray-600 leading-relaxed">{error}</p>
+      </div>
+      </div>
+    </div>
+      }
       
+         
     <div className="max-w-xl mx-auto bg-gradient-to-br gap-3 from-purple-800 to-indigo-800 p-8 rounded shadow-lg mt-8 flex ">
       <div
         className={`${
