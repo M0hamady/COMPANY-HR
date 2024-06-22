@@ -132,8 +132,8 @@ const AttendanceComponent: React.FC = () => {
         })
       );
       setAttendanceStatus("checked-in");
-    } catch (error) {
-      setError("error while handling check in ")
+    } catch (err) {
+      setError(`error while handling check in ${err}`)
       console.error("Error checking in:", error);
     }
   };
