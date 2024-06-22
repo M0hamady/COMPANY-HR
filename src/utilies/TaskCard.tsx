@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { assignTaskToFinish } from "../store/companyActions";
 import { Link } from "react-router-dom";
@@ -32,14 +32,22 @@ const handleRestart = () => {
 };
 export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
   const dispatch = useDispatch();
+  const [isFinishing, setIsFinishing] = useState(false);
 
-  const handleFinish = () => {
-    // Ensure that item.id is a number and not null before dispatching
-    if (typeof item.id === "number") {
-      dispatch(assignTaskToFinish(item.id) as any);
-      setCountUpdates(item.id);
-    } else {
-      console.error("item.id is null or not a number");
+  const handleFinish = async () => {
+    setIsFinishing(true);
+    try {
+      // Ensure that item.id is a number and not null before dispatching
+      if (typeof item.id === "number") {
+        await dispatch(assignTaskToFinish(item.id) as any);
+        setCountUpdates(item.id);
+      } else {
+        console.error("item.id is null or not a number");
+      }
+    } catch (error) {
+      console.error("Error finishing the step:", error);
+    } finally {
+      setIsFinishing(false);
     }
   };
   return (
@@ -84,7 +92,7 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
               className="bg-red-800 text-white px-4 py-2 rounded-lg"
               onClick={handleFinish}
             >
-              قم بانهاء الخطوة
+              {isFinishing ? "جاري انهاء الخطوة" : "قم بانهاء الخطوة"}
             </button>
           </div>
         )}

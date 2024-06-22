@@ -54,7 +54,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     handleTasks();
-  }, []);
+  }, [countUpdates]);
 
   useEffect(() => {
     const interval = setInterval(() => {
