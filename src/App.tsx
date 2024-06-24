@@ -10,6 +10,7 @@ import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import Task from './components/Task';
 import Project from './components/Project';
 import AttendanceComponent from './components/Attendance';
+import EmployeeProblemPreview from './components/EmployeeProblemPreview';
 
 export default function App() {
   const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/" element={loggedIn ? <Home /> : <Login />} />
           <Route path="/services" element={loggedIn ? <Services /> : <Login />} />
           <Route path="/attendance" element={loggedIn ? <AttendanceComponent /> : <Login />} />
+          <Route path="/problems" element={loggedIn ? <EmployeeProblemPreview /> : <Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/task/:id" element={loggedIn ? <Task /> : <Login />} />
           <Route path="/project/:id" element={loggedIn ? <Project /> : <Login />} />

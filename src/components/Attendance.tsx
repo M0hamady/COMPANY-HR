@@ -205,8 +205,7 @@ const AttendanceComponent: React.FC = () => {
         <div
           className={`${
             cachedResponse?.userType === "manager" ||
-            cachedResponse?.userType === "admin" ||
-            cachedResponse?.userType === "office_manage"
+            cachedResponse?.userType === "admin" 
               ? "border-r-2 border-green-300 px-2"
               : "w-full"
           } text-right`}
@@ -319,8 +318,7 @@ const AttendanceComponent: React.FC = () => {
           </div>
         </div>
         {cachedResponse?.userType === "manager" ||
-        cachedResponse?.userType === "admin" ||
-        cachedResponse?.userType === "office_manage" ? (
+        cachedResponse?.userType === "admin"  ? (
           <div>
             <h2 className="text-2xl font-bold mb-4 text-white w-full text-right">
               حضور اليوم
