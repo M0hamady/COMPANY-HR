@@ -100,7 +100,7 @@ const EmployeeProblemPreview: React.FC = () => {
     // Perform date range filtering
     if (startDate && endDate) {
       filteredData = filteredData.filter((problem) => {
-        const problemDate = problem.date_solved ? new Date(problem.date_solved) : null;
+        const problemDate = problem.date_created ? new Date(problem.date_created) : null;
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
   
@@ -113,9 +113,15 @@ const EmployeeProblemPreview: React.FC = () => {
     }
   
     // Perform sorting
-    filteredData = sort_by(filteredData, (problem) => {
-      const problemDate = problem.date_solved ? new Date(problem.date_solved).getTime() : 0;
-      return sortBy === 'date_asc' ? problemDate : -problemDate;
+    filteredData.sort((a, b) => {
+      const dateA = a.date_created ? new Date(a.date_created).getTime() : 0;
+      const dateB = b.date_created ? new Date(b.date_created).getTime() : 0;
+  
+      if (sortBy === 'date_asc') {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA; // Default to descending sort
+      }
     });
   
     setFilteredProblems(filteredData);
