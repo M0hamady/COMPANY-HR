@@ -88,66 +88,78 @@ const Home: React.FC = () => {
   }, [selectedProjectNum, countUpdates]);
   return (
     <Layout>
-      {loading ? <Loading />:
-      <div className="flex flex-col sm:flex-row gap-2 bg-[#071e34] max-w-[100vw]">
-      <div className="p-4 flex flex-col gap-2 h-[100vh] max-sm:h-[80vh] sm:w-2/7  " >
-        <div className=" row-span-3 ">
-          <section className="mx-auto bg-[#20354b] rounded-2xl px-2 py-2 shadow-lg">
-            <div className="mt-8 ">
-              <h2 className="text-white font-bold text-2xl tracking-wide">
-                {name}
-              </h2>
-            </div>
-            <p className="text-emerald-400 font-semibold mt-2.5">
-              {loggedIn && "Active"}
-            </p>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="flex flex-col sm:flex-row gap-2 bg-[#071e34] max-w-[100vw]">
+          <div className="p-4 flex flex-col gap-2 h-[100vh] max-sm:h-[80vh] sm:w-2/7  ">
+            <div className=" row-span-3 ">
+              <section className="mx-auto bg-[#20354b] rounded-2xl px-2 py-2 shadow-lg">
+                <div className="mt-8 ">
+                  <h2 className="text-white font-bold text-2xl tracking-wide">
+                    {name}
+                  </h2>
+                </div>
+                <p className="text-emerald-400 font-semibold mt-2.5">
+                  {loggedIn && "Active"}
+                </p>
 
-            <div className="h-1 w-full bg-black mt-8 rounded-full">
-              <div className="h-1 rounded-full w-2/5 bg-yellow-500 "></div>
+                <div className="h-1 w-full bg-black mt-8 rounded-full">
+                  <div className="h-1 rounded-full w-2/5 bg-yellow-500 "></div>
+                </div>
+                <div className="mt-3 text-white text-sm grid-cols-1 text-right ">
+                  <span className="text-gray-400 font-semibold col-span-1 text-right  ">
+                    اعمال اليوم : %40{" "}
+                  </span>
+                </div>
+              </section>
             </div>
-            <div className="mt-3 text-white text-sm grid-cols-1 text-right ">
-              <span className="text-gray-400 font-semibold col-span-1 text-right  ">
-                اعمال اليوم : %40{" "}
-              </span>
+            <div className=" row-span-9 text-white  flex flex-col gap-2 overflow-auto ">
+              {tasks ? (
+                tasks.map((item, index) => (
+                  <Card
+                    key={index}
+                    item={item}
+                    index={index}
+                    setCountUpdates={setCountUpdates}
+                  />
+                ))
+              ) : (
+                <>
+                لقد انتهت الجلسة
+                <Link to={"/login"}>اضغط هنا</Link>
+                </>
+              )}
             </div>
-          </section>
+          </div>
+          <div className="p-4 flex flex-col gap-2 h-[100vh]  sm:w-5/7 sm:h-[40vh] max-w-[66vw] max-sm:max-w-[99vw] ">
+            <div className=" row-span-2 text-white  flex flex-row gap-2 overflow-auto w-full  ">
+              {projects ? (
+                projects.map((item, index) => (
+                  <ProjectCard
+                    key={index}
+                    item={item}
+                    index={index}
+                    setSelectedProjectNum={setSelectedProjectNum}
+                  />
+                ))
+              ) : (
+                <Link to={"/login"}>اضغط هنا</Link>
+              )}
+            </div>
+            <div className="row-span-7 text-white  flex flex-row justify-around flex-wrap gap-2 overflow-auto absolute bottom-0 max-sm:-bottom-[80vh] h-[700px] max-sm:h-[740px]  ">
+              {selectedProjectTasks.map((item, index) => (
+                <Card
+                  key={index}
+                  item={item}
+                  index={index}
+                  setCountUpdates={setCountUpdates}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-        <div className=" row-span-9 text-white  flex flex-col gap-2 overflow-auto ">
-          {tasks.map((item, index) => (
-            <Card
-              key={index}
-              item={item}
-              index={index}
-              setCountUpdates={setCountUpdates}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="p-4 flex flex-col gap-2 h-[100vh]  sm:w-5/7 sm:h-[40vh] max-w-[66vw] max-sm:max-w-[99vw] ">
-        <div className=" row-span-2 text-white  flex flex-row gap-2 overflow-auto w-full  ">
-          {projects.map((item, index) => (
-            <ProjectCard
-              key={index}
-              item={item}
-              index={index}
-              setSelectedProjectNum={setSelectedProjectNum} 
-            />
-          ))}
-        </div>
-        <div className="row-span-7 text-white  flex flex-row justify-around flex-wrap gap-2 overflow-auto absolute bottom-0 max-sm:-bottom-[80vh] h-[700px] max-sm:h-[740px]  ">
-          {selectedProjectTasks.map((item, index) => (
-            <Card
-              key={index}
-              item={item}
-              index={index}
-              setCountUpdates={setCountUpdates}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-      } 
-      
+      )}
     </Layout>
   );
 };

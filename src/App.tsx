@@ -11,6 +11,8 @@ import Task from './components/Task';
 import Project from './components/Project';
 import AttendanceComponent from './components/Attendance';
 import EmployeeProblemPreview from './components/EmployeeProblemPreview';
+import DynamicForm from './utilies/DynamicForm';
+import EngineerRequests from './components/Engineering_requests';
 
 export default function App() {
   const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
@@ -30,6 +32,35 @@ export default function App() {
       },
     });
   }
+  const fields = [
+    { name: 'Name', type: 'text' },
+    { name: 'Birth Date', type: 'date' },
+    { name: 'Marital Status', type: 'select', options: ['Single', 'Married', 'Divorced', 'Widowed'] },
+    { name: 'Residence', type: 'text' },
+    { name: 'Secondary Residence', type: 'text' },
+    { name: 'Phone Number', type: 'tel' },
+    { name: 'Secondary Phone', type: 'tel' },
+    { name: 'Contact Email', type: 'email' },
+    { name: 'Military Status', type: 'select', options: ['Exempted', 'Postponed', 'Serving'] },
+    { name: 'Graduation Year', type: 'number' },
+    { name: 'Specialization', type: 'text' },
+    { name: 'University/Institute', type: 'text' },
+    { name: 'Has Driving License', type: 'select', options: ['Yes', 'No'] },
+    { name: 'Owns a Car', type: 'select', options: ['Yes', 'No'] },
+    { name: 'Employment Status', type: 'text' },
+    { name: 'Workplace (if any)', type: 'text' },
+    { name: 'Available Start in Days', type: 'number' },
+    { name: 'Last Salary', type: 'number' },
+    { name: 'Expected Salary', type: 'number' },
+    { name: 'Years of Interior Finishing Experience', type: 'number' },
+  ];
+  
+  const sections = [
+    { name: 'Personal Information', fields: fields.slice(0, 7) },
+    { name: 'Contact Information', fields: fields.slice(7, 10) },
+    { name: 'Education & Employment', fields: fields.slice(10) },
+  ];
+  const apiUrl = 'https://hrsupport.pythonanywhere.com/api/form-data/';
 
   return (
     <Provider store={Store}>
@@ -43,7 +74,10 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/task/:id" element={loggedIn ? <Task /> : <Login />} />
           <Route path="/project/:id" element={loggedIn ? <Project /> : <Login />} />
+          <Route path="/apply" element={<DynamicForm sections={sections}  apiUrl={apiUrl}/>} />
+          <Route path="/engineering-requests" element={<EngineerRequests />} />
           <Route path="*" element={<Navigate to="/" />} />
+          
         </Routes>
       </BrowserRouter>
     </Provider>
