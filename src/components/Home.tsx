@@ -59,7 +59,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleTasks();
-    }, 400000); // Run every second (1000 milliseconds)
+    }, 4000); // Run every second (1000 milliseconds)
 
     return () => {
       clearInterval(interval); // Clean up the interval on component unmount
