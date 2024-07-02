@@ -194,7 +194,7 @@ const EngineerRequests: React.FC = () => {
 
     // Create modal content for previewing request data
     const modalContent = (
-      <div className="p-4 bg-white shadow-lg rounded-lg">
+      <div className="p-4 bg-white shadow-lg rounded-lg text-gray-900">
         <h2 className="text-xl font-bold mb-2">{request.name}</h2>
         <p>Residence: {request.residence}</p>
         <p>Employment Status: {request.employment_status}</p>
@@ -254,7 +254,7 @@ const EngineerRequests: React.FC = () => {
 
   return (
     <Layout >
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 flex justify-between text-gray-900">
         <div className="flex space-x-4">
           <button
             onClick={() => handleFilterChange('rejected')}
