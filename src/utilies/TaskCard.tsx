@@ -44,7 +44,7 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
   return (
 <div className="w-full max-w-[400px] h-fit py-2 px-2 bg-[#20354b] rounded-2xl shadow-lg grid grid-flow-row">
       <div className=" flex flex-row-reverse items-center justify-start gap-3 px-2 ">
-        <div>/العميل</div>
+        <div>/المسئول</div>
         <div>{item.user}</div>
       </div>
       <div className=" flex flex-col justify-end text-right gap-1">

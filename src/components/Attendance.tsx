@@ -220,14 +220,14 @@ const AttendanceComponent: React.FC = () => {
                 onClick={handleCheckIn}
                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
               >
-                تسجيل الدخول
+                تسجيل الحضور
               </button>
             ) : (
               <button
                 onClick={handleCheckOut}
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
               >
-                تسجيل الخروج
+                تسجيل الانصراف
               </button>
             )}
           </div>
