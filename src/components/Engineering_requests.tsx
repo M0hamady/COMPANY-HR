@@ -282,10 +282,10 @@ const EngineerRequests: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-900">
         {filteredRequests.map((request) => (
           <div key={request.id} className="bg-white shadow-lg rounded-lg p-4 transition transform hover:-translate-y-2 hover:shadow-2xl">
-            <h2 className="text-xl font-bold mb-2">{request.name}</h2>
+            <h2 className="text-xl font-bold mb-2 ">{request.name}</h2>
             <p>{request.residence}</p>
             <p>{request.employment_status}</p>
             <div className="mt-4 flex justify-between">
