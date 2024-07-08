@@ -1,5 +1,5 @@
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import {
   Attendance,
@@ -10,6 +10,7 @@ import {
 } from "../store/companyActions";
 import { LoginResponse } from "../utilies/Problems";
 import Layout from "../utilies/Layout";
+import SpinnerModal from "../utilies/loading/SpinnerModal";
 
 const AttendanceComponent: React.FC = () => {
   const [location, setLocation] = useState<{
@@ -21,10 +22,11 @@ const AttendanceComponent: React.FC = () => {
   >(null);
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch: ThunkDispatch<any, undefined, AnyAction> = useDispatch();
-  const [attendanceData, setAttendanceData] = useState<Attendance[]>([]); // State to hold attendance data
+  const [attendanceData, setAttendanceData] = useState<Attendance[]>([]);
   const [lastAttendanceData, setLastAttendanceData] =
-    useState<Attendance | null>(null); // State to hold last attendance data
+    useState<Attendance | null>(null);
   const [todayAttendance, setTodayAttendance] = useState<TodayAttendance[]>([]);
   const cachedResponseJson = localStorage.getItem("loginResponse");
 
@@ -35,64 +37,64 @@ const AttendanceComponent: React.FC = () => {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const errorInterval = setInterval(() => {
       setError("");
     }, 3000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(errorInterval);
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const dateTimeInterval = setInterval(() => {
       const now = new Date();
-      const formattedDateTime = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
-      setCurrentDateTime(formattedDateTime);
+      setCurrentDateTime(
+        `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`
+      );
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(dateTimeInterval);
   }, []);
 
-  const handleAttendanceData = () => {
+  const handleAttendanceData = useCallback(() => {
     dispatch(getAttendance()).then((response: any) => {
       if (!response.error) {
         setAttendanceData(response.payload);
-        setLastAttendanceData(response.payload[response.payload.length - 1]);
+        const lastData = response.payload[response.payload.length - 1];
+        setLastAttendanceData(lastData);
         if (response.payload.length > 0) {
-          if (!response.payload[response.payload.length - 1]?.check_out) {
-            setAttendanceStatus("checked-in");
-          } else {
-            setAttendanceStatus("checked-out");
-          }
+          setAttendanceStatus(
+            lastData?.check_out ? "checked-out" : "checked-in"
+          );
         }
       } else {
-        // Handle error case, such as unauthorized access or other errors
-        setError("error while handling attendance date");
+        setError("error while handling attendance data");
         console.error(response.error.message);
       }
     });
-  };
-  const handleAttendanceDataEmployee = () => {
+  }, [dispatch]);
+
+  const handleAttendanceDataEmployee = useCallback(() => {
     dispatch(getTodayAttendance()).then((response: any) => {
       if (!response.error) {
-        // console.log(response.payload, "atendance");
         setTodayAttendance(response.payload);
       } else {
-        // Handle error case, such as unauthorized access or other errors
         console.error("err");
       }
     });
-  };
+  }, [dispatch]);
+
   useEffect(() => {
     handleAttendanceData();
     handleAttendanceDataEmployee();
-  }, [attendanceStatus]);
+  }, [attendanceStatus, handleAttendanceData, handleAttendanceDataEmployee]);
+
   useEffect(() => {
-    const interval = setInterval(() => {
+    const attendanceInterval = setInterval(() => {
       handleAttendanceData();
       handleAttendanceDataEmployee();
     }, 60000);
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(attendanceInterval);
+  }, [handleAttendanceData, handleAttendanceDataEmployee]);
 
   const getLocation = (): Promise<{ latitude: number; longitude: number }> => {
     return new Promise((resolve, reject) => {
@@ -104,10 +106,12 @@ const AttendanceComponent: React.FC = () => {
           },
           (error) => {
             if (error.code === error.PERMISSION_DENIED) {
-              reject(new Error("We were unable to access your location. Please allow location access for this feature to work"));
+              reject(
+                new Error(
+                  "We were unable to access your location. Please allow location access for this feature to work"
+                )
+              );
             } else {
-              // Handle other errors (e.g., geolocation failure)
-              // Optionally, provide alternative methods here (e.g., IP geolocation or manual entry)
               reject(error);
             }
           }
@@ -117,17 +121,15 @@ const AttendanceComponent: React.FC = () => {
       }
     });
   };
-  
 
   const handleCheckIn = async () => {
     try {
-      const location = await getLocation();
-      const currentDateTime = new Date();
-
+      setLoading(true);
+      const loc = await getLocation();
       await dispatch(
         postAttendance({
-          latitude: location.latitude,
-          longitude: location.longitude,
+          latitude: loc.latitude,
+          longitude: loc.longitude,
           id: 0,
           check_in: null,
           check_out: null,
@@ -136,6 +138,7 @@ const AttendanceComponent: React.FC = () => {
         })
       );
       setAttendanceStatus("checked-in");
+      setLoading(false);
     } catch (err) {
       setError(
         `هذا الجهاز لا يدعم خاصية تحديد الموقع يرجي تسجيل الحضور من جهاز ${err}`
@@ -146,13 +149,12 @@ const AttendanceComponent: React.FC = () => {
 
   const handleCheckOut = async () => {
     try {
-      const location = await getLocation();
-      const currentDateTime = new Date();
-
+      setLoading(true);
+      const loc = await getLocation();
       await dispatch(
         postAttendance({
-          latitude: location.latitude,
-          longitude: location.longitude,
+          latitude: loc.latitude,
+          longitude: loc.longitude,
           id: 0,
           check_in: null,
           check_out: null,
@@ -161,8 +163,9 @@ const AttendanceComponent: React.FC = () => {
         })
       );
       setAttendanceStatus("checked-out");
+      setLoading(false)
     } catch (error) {
-      setError("error while handling check out ");
+      setError("error while handling check out");
       console.error("Error checking out:", error);
     }
   };
@@ -200,99 +203,67 @@ const AttendanceComponent: React.FC = () => {
           </div>
         </div>
       )}
+      {loading ? (
+        <SpinnerModal message="جاري اعداد حضورك" show={loading} type="alarm" />
+      ) : (
+        <div className="max-w-xl mx-auto bg-gradient-to-br gap-3 from-purple-800 to-indigo-800 p-8 rounded shadow-lg mt-8 flex">
+          <div
+            className={`${
+              cachedResponse?.userType === "manager" ||
+              cachedResponse?.userType === "admin"
+                ? "border-r-2 border-green-300 px-2"
+                : "w-full"
+            } text-right`}
+          >
+            <h2 className="text-3xl font-bold mb-4 text-white">
+              الحضور والانصراف
+            </h2>
 
-      <div className="max-w-xl mx-auto bg-gradient-to-br gap-3 from-purple-800 to-indigo-800 p-8 rounded shadow-lg mt-8 flex ">
-        <div
-          className={`${
-            cachedResponse?.userType === "manager" ||
-            cachedResponse?.userType === "admin" 
-              ? "border-r-2 border-green-300 px-2"
-              : "w-full"
-          } text-right`}
-        >
-          <h2 className="text-3xl font-bold mb-4 text-white">
-            الحضور والانصراف
-          </h2>
-
-          <div className="mb-4">
-            {!attendanceStatus || attendanceStatus === "checked-out" ? (
-              <button
-                onClick={handleCheckIn}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
-              >
-                تسجيل الحضور
-              </button>
-            ) : (
-              <button
-                onClick={handleCheckOut}
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
-              >
-                تسجيل الانصراف
-              </button>
-            )}
-          </div>
-
-          {location.latitude && location.longitude && (
             <div className="mb-4">
-              <a
-                href={getGoogleMapsLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              >
-                عرض الموقع على خرائط جوجل
-              </a>
+              {!attendanceStatus || attendanceStatus === "checked-out" ? (
+                <button
+                  onClick={handleCheckIn}
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+                >
+                  تسجيل الحضور
+                </button>
+              ) : (
+                <button
+                  onClick={handleCheckOut}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+                >
+                  تسجيل الانصراف
+                </button>
+              )}
             </div>
-          )}
 
-          <div className="mt-4">
-            <p className="text-sm text-gray-200">التاريخ والوقت الحالي:</p>
-            <p className="text-lg font-bold text-white">{currentDateTime}</p>
-          </div>
-
-          <div>
-            {lastAttendanceData ? (
-              <div>
-                <p className="text-sm text-gray-200">تاريخ آخر حضور:</p>
-                <p className="text-lg font-bold text-white">
-                  {lastAttendanceData.check_in &&
-                    `${new Date(lastAttendanceData.check_in).toLocaleString(
-                      "ar-EG",
-                      {
-                        month: "2-digit",
-                        day: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                        weekday: "long",
-                      }
-                    )}`}
-                </p>
-                {!lastAttendanceData.check_out && (
-                  <p className="text-lg text-red-500 font-bold">
-                    انت لم تغادر بعد
-                  </p>
-                )}
+            {location.latitude && location.longitude && (
+              <div className="mb-4">
+                <a
+                  href={getGoogleMapsLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                  عرض الموقع على خرائط جوجل
+                </a>
               </div>
-            ) : (
-              <p className="text-lg font-bold text-white">
-                {" "}
-                لم يتم تسجيل حضورك بعد{" "}
-              </p>
             )}
 
-            <div className="mt-8">
-              <h3 className="text-2xl font-bold mb-4 text-white">
-                المواعيد السابقة
-              </h3>
-              <ul className="divide-y divide-gray-200 flex flex-col-reverse">
-                {attendanceData.map((attendance, index) => (
-                  <li key={index} className="py-2">
-                    <p className="text-lg font-bold text-white">
-                      {`${
-                        attendance.check_in &&
-                        new Date(attendance.check_in).toLocaleString("ar-EG", {
+            <div className="mt-4">
+              <p className="text-sm text-gray-200">التاريخ والوقت الحالي:</p>
+              <p className="text-lg font-bold text-white">{currentDateTime}</p>
+            </div>
+
+            <div>
+              {lastAttendanceData ? (
+                <div>
+                  <p className="text-sm text-gray-200">تاريخ آخر حضور:</p>
+                  <p className="text-lg font-bold text-white">
+                    {lastAttendanceData.check_in &&
+                      `${new Date(lastAttendanceData.check_in).toLocaleString(
+                        "ar-EG",
+                        {
                           month: "2-digit",
                           day: "2-digit",
                           year: "numeric",
@@ -300,45 +271,82 @@ const AttendanceComponent: React.FC = () => {
                           minute: "2-digit",
                           hour12: true,
                           weekday: "long",
-                        })
-                      }`}
-                      {attendance.check_out ? (
-                        <span className="ml-2 text-green-500"> تم الخروج </span>
-                      ) : (
-                        <span className="ml-2 text-red-500">
-                          {" "}
-                          لم يتم الخروج بعد{" "}
-                        </span>
-                      )}
+                        }
+                      )}`}
+                  </p>
+                  {!lastAttendanceData.check_out && (
+                    <p className="text-lg text-red-500 font-bold">
+                      انت لم تغادر بعد
                     </p>
-                  </li>
-                ))}
-              </ul>
+                  )}
+                </div>
+              ) : (
+                <p className="text-lg font-bold text-white">
+                  {" "}
+                  لم يتم تسجيل حضورك بعد{" "}
+                </p>
+              )}
+
+              <div className="mt-8">
+                <h3 className="text-2xl font-bold mb-4 text-white">
+                  المواعيد السابقة
+                </h3>
+                <ul className="divide-y divide-gray-200 flex flex-col-reverse">
+                  {attendanceData.map((attendance, index) => (
+                    <li key={index} className="py-2">
+                      <p className="text-lg font-bold text-white">
+                        {attendance.check_in &&
+                          new Date(attendance.check_in).toLocaleString(
+                            "ar-EG",
+                            {
+                              month: "2-digit",
+                              day: "2-digit",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: true,
+                              weekday: "long",
+                            }
+                          )}
+                        {attendance.check_out ? (
+                          <span className="ml-2 text-green-500">
+                            {" "}
+                            تم الخروج{" "}
+                          </span>
+                        ) : (
+                          <span className="ml-2 text-red-500">
+                            {" "}
+                            لم يتم الخروج بعد{" "}
+                          </span>
+                        )}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-        {cachedResponse?.userType === "manager" ||
-        cachedResponse?.userType === "admin"  ? (
-          <div>
-            <h2 className="text-2xl font-bold mb-4 text-white w-full text-right">
-              حضور اليوم
-            </h2>
-            <div className="max-h-[90vh] overflow-auto scrollbar-hide ">
-              {todayAttendance?.map((item) => (
-                <div
-                  key={`${item.userName}-${item.check_in}`}
-                  className={`bg-${
-                    item.check_in && item.check_out ? "green-500" : "gray-200"
-                  } p-4 mb-4 rounded-lg shadow-md`}
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-800">
-                        {item.userName}
-                      </h3>
-                      <p className="text-gray-600">Duration:</p>
-                      <p className="text-gray-600">{item.totalDuration}</p>
-                      <p className="text-gray-600">
+          {(cachedResponse?.userType === "manager" ||
+            cachedResponse?.userType === "admin") && (
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-white w-full text-right">
+                حضور اليوم
+              </h2>
+              <div className="max-h-[90vh] overflow-auto scrollbar-hide">
+                {todayAttendance?.map((item) => (
+                  <div
+                    key={`${item.userName}-${item.check_in}`}
+                    className={`bg-${
+                      item.check_in && item.check_out ? "green-500" : "gray-200"
+                    } p-4 mb-4 rounded-lg shadow-md`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800">
+                          {item.userName}
+                        </h3>
+                        <p className="text-gray-600">Duration:</p>
+                        <p className="text-gray-600">{item.totalDuration}</p>
                         {item.checkInLocation.googleMapsLink && (
                           <a
                             href={item.checkInLocation.googleMapsLink}
@@ -349,17 +357,15 @@ const AttendanceComponent: React.FC = () => {
                             View on Map
                           </a>
                         )}
-                      </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </Layout>
   );
 };

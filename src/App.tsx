@@ -4,6 +4,7 @@ import Store from './store';
 import Home from './components/Home';
 import Services from './components/Services';
 import Login from './components/Login';
+import WelcomePage from './components/Welcome';
 import { RootState } from './store/reducers';
 import { ToastContainer } from 'react-toastify';
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
@@ -67,7 +68,8 @@ export default function App() {
       <ToastContainer />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={loggedIn ? <Home /> : <Login />} />
+          <Route path="/" element={loggedIn ? <WelcomePage /> : <Login />} />
+          <Route path="/home" element={loggedIn ? <Home /> : <Login />} />
           <Route path="/services" element={loggedIn ? <Services /> : <Login />} />
           <Route path="/attendance" element={loggedIn ? <AttendanceComponent /> : <Login />} />
           <Route path="/problems" element={loggedIn ? <EmployeeProblemPreview /> : <Login />} />
