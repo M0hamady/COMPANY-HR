@@ -1,10 +1,10 @@
 // src/components/WelcomePage.tsx
 import React, { useEffect, useState } from 'react';
-import Typical from 'react-typical';
 import axios from 'axios';
 import image from './robot-with-helmet-clipboard.png'
 import Layout from '../utilies/Layout';
 import NotificationComponent from '../utilies/NotificationComponent';
+
 interface WeatherResponse {
   weather: { description: string }[];
 }
@@ -12,8 +12,9 @@ interface WeatherResponse {
 const WelcomePage: React.FC = () => {
   const [weather, setWeather] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-
+  const [currentMessage, setCurrentMessage] = useState<string>('');
+  const [messageIndex, setMessageIndex] = useState<number>(0);
+  const [charIndex, setCharIndex] = useState<number>(0);
 
   const messages: string[] = [
     'support constructions!',
@@ -21,17 +22,40 @@ const WelcomePage: React.FC = () => {
     'تذكر تسجيل الحضور عند دخولك!',
   ];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (charIndex < messages[messageIndex].length) {
+        setCurrentMessage((prev) => prev + messages[messageIndex][charIndex]);
+        setCharIndex((prev) => prev + 1);
+      } else if (messageIndex < messages.length - 1) {
+        setTimeout(() => {
+          setCurrentMessage('');
+          setCharIndex(0);
+          setMessageIndex((prev) => prev + 1);
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          setCurrentMessage('');
+          setCharIndex(0);
+          setMessageIndex(0);
+        }, 2000);
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [charIndex, messageIndex, messages]);
+
   return (
     <Layout>
-    <div className="flex flex-col  mx-2 h-screen  p-4">
-    <NotificationComponent />
-      <div className="mt-10">
-        <img src={image} alt="Animated Robot " className="w-62 h-64" />
+      <div className="flex flex-col mx-2 h-screen p-4">
+        <NotificationComponent />
+        <div className="mt-10">
+          <img src={image} alt="Animated Robot" className="w-62 h-64" />
+        </div>
+        <div className="text-3xl font-bold text-atrule">
+          <p>{currentMessage}</p>
+        </div>
       </div>
-      <div className="text-3xl font-bold text-atrule">
-        <Typical steps={messages.flatMap(msg => [msg, 2000])}  wrapper="p" />
-      </div>
-    </div></Layout>
+    </Layout>
   );
 };
 
