@@ -14,11 +14,16 @@ import AttendanceComponent from './components/Attendance';
 import EmployeeProblemPreview from './components/EmployeeProblemPreview';
 import DynamicForm from './utilies/DynamicForm';
 import EngineerRequests from './components/Engineering_requests';
+import { useEffect } from 'react';
 
 export default function App() {
   const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
   const dispatch: ThunkDispatch<any, undefined, AnyAction> = useDispatch();
-
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
+}, []);
   const cachedResponse = localStorage.getItem('loginResponse');
   if (cachedResponse) {
     const data = JSON.parse(cachedResponse);
