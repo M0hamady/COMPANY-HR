@@ -1,3 +1,4 @@
+// NotificationComponent.tsx
 import React, { useEffect, useState } from 'react';
 
 interface Notification {
@@ -7,59 +8,8 @@ interface Notification {
 
 const NotificationComponent: React.FC = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
-    const [firstTime, setFirstTime] = useState(true);
+    const userId = 'YOUR_USER_ID'; // Replace with the actual user ID
 
-    useEffect(() => {
-        checkPermissionAndShowNotification();
-    }, []);
-
-    const checkPermissionAndShowNotification = async () => {
-        let permission = Notification.permission;
-        if (permission === 'default') {
-            permission = await Notification.requestPermission();
-        }
-
-        if (permission === 'granted') {
-            if (firstTime) {
-                showWelcomeNotification();
-                setFirstTime(false);
-            } else {
-                showRegularNotification();
-            }
-        } else {
-            console.log('Permission not granted for notifications.');
-        }
-    };
-
-    const showWelcomeNotification = () => {
-        const welcomeNotification: Notification = {
-            title: 'Welcome to Support Constructions!',
-            description: 'We are excited to have you on board. Feel free to explore our services.',
-        };
-
-        const updatedNotifications = [...notifications, welcomeNotification];
-        setNotifications(updatedNotifications);
-
-        displayNotification(welcomeNotification.title, welcomeNotification.description);
-    };
-
-    const showRegularNotification = () => {
-        const regularNotification: Notification = {
-            title: 'New Notification',
-            description: 'This is a regular notification message.',
-        };
-
-        const updatedNotifications = [...notifications, regularNotification];
-        setNotifications(updatedNotifications);
-
-        displayNotification(regularNotification.title, regularNotification.description);
-    };
-
-    const displayNotification = (title: string, body: string) => {
-        if ('Notification' in window) {
-            new Notification(title, { body });
-        }
-    };
 
     return (
         <div>
