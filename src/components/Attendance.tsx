@@ -68,8 +68,8 @@ const AttendanceComponent: React.FC = () => {
         }
       } else {
         setError("error while handling attendance data");
-        window.location.href = ''
-        console.error(response.error.message);
+        window.location.href = '/login'
+        // console.log(response.error.message);
       }
     });
   }, [dispatch]);
