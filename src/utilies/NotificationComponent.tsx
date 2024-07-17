@@ -8,7 +8,6 @@ interface Notification {
 
 const NotificationComponent: React.FC = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
-    const userId = 'YOUR_USER_ID'; // Replace with the actual user ID
 
 
     return (
