@@ -66,6 +66,9 @@ const AttendanceComponent: React.FC = () => {
             lastData?.check_out ? "checked-out" : "checked-in"
           );
         }
+        else{
+        window.location.href = '/login'
+        }
       } else {
         setError("error while handling attendance data");
         window.location.href = '/login'
