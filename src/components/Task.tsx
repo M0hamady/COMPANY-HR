@@ -63,6 +63,7 @@ const Task = () => {
   const [isUpdated, setIsUpdate] = useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const fetchTask = async () => {
+    console.log('555555555555555555555');
     try {
       const data: any = await dispatch(getExactTask(id) as any);
       console.log(data);
@@ -75,9 +76,11 @@ const Task = () => {
   };
 
   useEffect(() => {
+    console.log('reaced');
  fetchTask()
   },[1])
   useEffect(() => {
+    console.log('555555555555555555555');
  
 
     const delay = setTimeout(() => {

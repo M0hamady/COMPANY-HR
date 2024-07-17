@@ -73,16 +73,16 @@ export default function App() {
       <ToastContainer />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={loggedIn ? <WelcomePage /> : <Login />} />
           <Route path="/home" element={loggedIn ? <Home /> : <Login />} />
           <Route path="/services" element={loggedIn ? <Services /> : <Login />} />
           <Route path="/attendance" element={loggedIn ? <AttendanceComponent /> : <Login />} />
           <Route path="/problems" element={loggedIn ? <EmployeeProblemPreview /> : <Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/task/:id" element={loggedIn ? <Task /> : <Login />} />
-          <Route path="/project/:id" element={loggedIn ? <Project /> : <Login />} />
+          <Route path="/task/:id" element={<Task /> } />
+          <Route path="/project/:id" element={<Project /> } />
           <Route path="/apply" element={<DynamicForm sections={sections}  apiUrl={apiUrl}/>} />
           <Route path="/engineering-requests" element={<EngineerRequests />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={loggedIn ? <WelcomePage /> : <Login />} />
           <Route path="*" element={<Navigate to="/" />} />
           
         </Routes>

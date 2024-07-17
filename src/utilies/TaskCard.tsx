@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { assignTaskToFinish } from "../store/companyActions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface CardProps {
   item: any;
@@ -13,6 +13,7 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [updatedItem, setUpdatedItem] = useState<any>(item); // State to hold the updated item
+  const navigate = useNavigate();
 
   const handleFinish = async () => {
     setLoading(true);
@@ -39,12 +40,15 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
   // Function to handle restart action
   const handleRestart = () => {
     // Logic to restart the work on the item
+    navigate(`/task/${updatedItem.id}`);
+    console.log(updatedItem.id);
+
   };
 
   return (
 <div className="w-full max-w-[400px] h-fit py-2 px-2 bg-[#20354b] rounded-2xl shadow-lg grid grid-flow-row">
       <div className=" flex flex-row-reverse items-center justify-start gap-3 px-2 ">
-        <div>/المسئول</div>
+        <div>/العميل</div>
         <div>{item.user}</div>
       </div>
       <div className=" flex flex-col justify-end text-right gap-1">
@@ -72,7 +76,7 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
           <div>
             <button
               className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
-              // onClick={handleRestart}
+              onClick={handleRestart}
             >
               انتهي
             </button>
@@ -89,13 +93,13 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
           </div>
         )}
 
-        <Link
-          to={`task/${updatedItem.id}`}
+        <button
+          // to={`task/${updatedItem.id}`}
           className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
-          // onClick={handleRestart}
+          onClick={handleRestart}
         >
           عرض
-        </Link>
+        </button>
       </div>
     </div>
   );
