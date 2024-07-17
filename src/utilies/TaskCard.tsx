@@ -92,7 +92,7 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
         <Link
           to={`task/${updatedItem.id}`}
           className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
-          onClick={handleRestart}
+          // onClick={handleRestart}
         >
           عرض
         </Link>
