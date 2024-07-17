@@ -22,28 +22,6 @@ const WelcomePage: React.FC = () => {
     'تذكر تسجيل الحضور عند دخولك!',
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (charIndex < messages[messageIndex].length) {
-        setCurrentMessage((prev) => prev + messages[messageIndex][charIndex]);
-        setCharIndex((prev) => prev + 1);
-      } else if (messageIndex < messages.length - 1) {
-        setTimeout(() => {
-          setCurrentMessage('');
-          setCharIndex(0);
-          setMessageIndex((prev) => prev + 1);
-        }, 2000);
-      } else {
-        setTimeout(() => {
-          setCurrentMessage('');
-          setCharIndex(0);
-          setMessageIndex(0);
-        }, 2000);
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, [charIndex, messageIndex, messages]);
-
   return (
     <Layout>
       <div className="flex flex-col mx-2 h-screen p-4">

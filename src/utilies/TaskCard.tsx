@@ -72,7 +72,7 @@ export const Card: React.FC<CardProps> = ({ item, index, setCountUpdates }) => {
           <div>
             <button
               className="bg-emerald-400 text-white px-4 py-2 rounded-lg"
-              onClick={handleRestart}
+              // onClick={handleRestart}
             >
               انتهي
             </button>
