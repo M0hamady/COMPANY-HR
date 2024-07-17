@@ -1,4 +1,3 @@
-// NotificationComponent.tsx
 import React, { useEffect, useState } from 'react';
 
 interface Notification {
@@ -8,26 +7,59 @@ interface Notification {
 
 const NotificationComponent: React.FC = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
-    const userId = 'YOUR_USER_ID'; // Replace with the actual user ID
+    const [firstTime, setFirstTime] = useState(true);
 
-    // useEffect(() => {
-    //     const socket = new WebSocket(`ws://localhost:8000/ws/notifications/${1}/`);
+    useEffect(() => {
+        checkPermissionAndShowNotification();
+    }, []);
 
-    //     socket.onmessage = (event) => {
-    //         const data = JSON.parse(event.data);
-    //         const newNotification: Notification = {
-    //             title: data.title,
-    //             description: data.description,
-    //         };
-    //         setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-    //         // Use device notification API to present the notification
-    //         new Notification(newNotification.title, { body: newNotification.description });
-    //     };
+    const checkPermissionAndShowNotification = async () => {
+        let permission = Notification.permission;
+        if (permission === 'default') {
+            permission = await Notification.requestPermission();
+        }
 
-    //     return () => {
-    //         socket.close();
-    //     };
-    // }, [userId]);
+        if (permission === 'granted') {
+            if (firstTime) {
+                showWelcomeNotification();
+                setFirstTime(false);
+            } else {
+                showRegularNotification();
+            }
+        } else {
+            console.log('Permission not granted for notifications.');
+        }
+    };
+
+    const showWelcomeNotification = () => {
+        const welcomeNotification: Notification = {
+            title: 'Welcome to Support Constructions!',
+            description: 'We are excited to have you on board. Feel free to explore our services.',
+        };
+
+        const updatedNotifications = [...notifications, welcomeNotification];
+        setNotifications(updatedNotifications);
+
+        displayNotification(welcomeNotification.title, welcomeNotification.description);
+    };
+
+    const showRegularNotification = () => {
+        const regularNotification: Notification = {
+            title: 'New Notification',
+            description: 'This is a regular notification message.',
+        };
+
+        const updatedNotifications = [...notifications, regularNotification];
+        setNotifications(updatedNotifications);
+
+        displayNotification(regularNotification.title, regularNotification.description);
+    };
+
+    const displayNotification = (title: string, body: string) => {
+        if ('Notification' in window) {
+            new Notification(title, { body });
+        }
+    };
 
     return (
         <div>

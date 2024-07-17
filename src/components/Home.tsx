@@ -48,7 +48,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     handleProjects();
-  }, [countUpdates]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
