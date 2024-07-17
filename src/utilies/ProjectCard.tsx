@@ -42,7 +42,7 @@ export const ProjectCard: React.FC<CardProps> = ({
         <div className="bg-indigo-800 text-white  rounded-lg max-h-[40px] min-w-[60px] flex">
           <Link
             className=" text-white px-4 py-2"
-            to={`project/${item.id}`} // Set the onClick event handler
+            to={`/project/${item.id}`} // Set the onClick event handler
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
