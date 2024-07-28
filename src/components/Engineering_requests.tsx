@@ -79,7 +79,7 @@ const EngineerRequests: React.FC = () => {
 
   const fetchRequests = async (token: string) => {
     try {
-      const response = await axios.get<any[]>('http://127.0.0.1:8000/api/engineer-requests/', {
+      const response = await axios.get<any[]>('  https://hrsupport.pythonanywhere.com/api/engineer-requests/', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -134,7 +134,7 @@ const EngineerRequests: React.FC = () => {
     }
 
     try {
-      await axios.patch(`http://127.0.0.1:8000/api/engineer-requests/${id}/`, data, {
+      await axios.patch(`  https://hrsupport.pythonanywhere.com/api/engineer-requests/${id}/`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -153,7 +153,7 @@ const EngineerRequests: React.FC = () => {
     }
 
     try {
-      await axios.patch(`http://127.0.0.1:8000/api/engineer-requests/${id}/`, { rejected_reason }, {
+      await axios.patch(`  https://hrsupport.pythonanywhere.com/api/engineer-requests/${id}/`, { rejected_reason }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -31,7 +31,7 @@ const Tickets: React.FC = () => {
 
   const fetchTickets = async (authToken: string) => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/tickets/", {
+      const response = await axios.get("  https://hrsupport.pythonanywhere.com/api/tickets/", {
         headers: { Authorization: `Bearer ${authToken}` },
       });
 
@@ -48,7 +48,7 @@ const Tickets: React.FC = () => {
 
   const fetchTicketDetails = async (ticketId: string) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/tickets-detail/?ticket_id=${ticketId}`, {
+      const response = await axios.get(`  https://hrsupport.pythonanywhere.com/api/tickets-detail/?ticket_id=${ticketId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSelectedTicket(response.data);

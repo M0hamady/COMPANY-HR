@@ -37,7 +37,7 @@ useEffect(() => {
   const handleCompleteAssignment = async (assignmentId: number) => {
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/ticket-assignments/${assignmentId}/complete/`,
+        `  https://hrsupport.pythonanywhere.com/api/ticket-assignments/${assignmentId}/complete/`,
         {},
         {
           headers: {
@@ -70,7 +70,7 @@ useEffect(() => {
   const handleEditTicket = async () => {
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/api/tickets-detail/${currentTicket[0].id}/`,
+        `  https://hrsupport.pythonanywhere.com/api/tickets-detail/${currentTicket[0].id}/`,
         { title: editTitle, description: editDescription },
         {
           headers: {
@@ -88,7 +88,6 @@ useEffect(() => {
       console.error("Error editing ticket", error);
     }
   };
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen p-4 text-center">

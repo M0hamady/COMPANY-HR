@@ -39,7 +39,7 @@ const EmployeeProblemPreview: React.FC = () => {
     const fetchEmployeeProblems = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://127.0.0.1:8000/api/task-problems/', {
+        const response = await axios.get('  https://hrsupport.pythonanywhere.com/api/task-problems/', {
           params: {
             startDate,
             endDate,

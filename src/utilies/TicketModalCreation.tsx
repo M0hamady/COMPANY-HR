@@ -27,7 +27,7 @@ const TicketModalCreation: React.FC<TicketModalProps> = ({ isOpen, onClose, toke
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/users/", {
+      const response = await axios.get("  https://hrsupport.pythonanywhere.com/api/users/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAllUsers(response.data);
@@ -39,7 +39,7 @@ const TicketModalCreation: React.FC<TicketModalProps> = ({ isOpen, onClose, toke
   const handleCreateTicket = async () => {
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/tickets/",
+        "  https://hrsupport.pythonanywhere.com/api/tickets/",
         { title: newTicketTitle, description: newTicketDescription },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -55,7 +55,7 @@ const TicketModalCreation: React.FC<TicketModalProps> = ({ isOpen, onClose, toke
     if (selectedTicketId && newStepDescription) {
       try {
         await axios.post(
-          `http://127.0.0.1:8000/api/steps/`,
+          `  https://hrsupport.pythonanywhere.com/api/steps/`,
           { description: newStepDescription, order: stepOrder, ticket: selectedTicketId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -73,7 +73,7 @@ const TicketModalCreation: React.FC<TicketModalProps> = ({ isOpen, onClose, toke
         await Promise.all(
           selectedUsers.map(userId =>
             axios.post(
-              `http://127.0.0.1:8000/api/ticket-assignments/`,
+              `  https://hrsupport.pythonanywhere.com/api/ticket-assignments/`,
               { user: userId ,ticket: selectedTicketId },
               { headers: { Authorization: `Bearer ${token}` } }
             )
