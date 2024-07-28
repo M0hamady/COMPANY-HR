@@ -75,8 +75,8 @@ const Home: React.FC = () => {
       {loading ? (
         <Loading />
       ) : (
-        <div className="flex flex-col sm:flex-row gap-2 bg-[#9fb3c7] max-w-[100vw] max-sm:gap-24 ">
-          <div className="p-4 flex flex-col gap-2 h-[100vh] max-sm:h-[25vh]  sm:w-2/7 ">
+        <div className="flex flex-col sm:flex-row gap-2 bg-[#071e34] max-w-[100vw] lg:h-[100vh]">
+          <div className="p-4 flex flex-col gap-2 h-[25vh] max-sm:h-[25vh]  sm:w-2/7 max-400:h-[42vh]">
             <div className="row-span-3  ">
               <section className="mx-auto bg-[#20354b] rounded-2xl px-2 py-2 shadow-lg  ">
                 <div className="mt-8">
@@ -99,8 +99,8 @@ const Home: React.FC = () => {
               </section>
             </div>
           </div>
-          <div className="p-4 flex flex-col gap-2 h-[140vh] sm:w-5/7 sm:h-[40vh] max-w-[66vw] max-sm:max-w-[99vw] max-sm:h-[100vh] max-sm:gap-10  ">
-            <div className="row-span-2 text-white flex flex-row gap-2 max-sm:h-[30vh]  overflow-auto w-full ">
+          <div className="p-4 flex flex-col gap-2 h-[100vh] sm:w-5/7 sm:h-[40vh] max-w-[84vw] max-sm:max-w-[99vw] max-400:h-[140vh] max-400:relative lg:h-[100vh] ">
+            <div className="row-span-2 text-white flex flex-row gap-2 overflow-auto w-full lg:h-[100vh] max-400:h-[40vh]  ">
               {projects ? (
                 projects.map((item, index) => (
                   <ProjectCard
@@ -115,7 +115,7 @@ const Home: React.FC = () => {
                 <Link to={"/login"}>اضغط هنا</Link>
               )}
             </div>
-            <div className="row-span-7 text-white flex flex-row justify-around flex-wrap gap-2 overflow-auto absolute bottom-0 max-sm:-bottom-[40vh] h-[700px] max-sm:h-[50vh]   ">
+            <div className="row-span-7 text-white flex flex-row justify-around flex-wrap gap-2 overflow-auto   h-[700px] max-sm:h-[740px]  max-400:h-[90vh] max-400:bottom-0  ">
               {selectedProjectTasks.map((item, index) => (
                 <Card
                   key={index}
