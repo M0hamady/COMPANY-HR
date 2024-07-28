@@ -15,6 +15,7 @@ import EmployeeProblemPreview from './components/EmployeeProblemPreview';
 import DynamicForm from './utilies/DynamicForm';
 import EngineerRequests from './components/Engineering_requests';
 import { useEffect } from 'react';
+import Tickets from './components/Tickets';
 
 export default function App() {
   const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
@@ -74,6 +75,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/home" element={loggedIn ? <Home /> : <Login />} />
+          <Route path="/tickets" element={loggedIn ? <Tickets /> : <Login />} />
           <Route path="/services" element={loggedIn ? <Services /> : <Login />} />
           <Route path="/attendance" element={loggedIn ? <AttendanceComponent /> : <Login />} />
           <Route path="/problems" element={loggedIn ? <EmployeeProblemPreview /> : <Login />} />

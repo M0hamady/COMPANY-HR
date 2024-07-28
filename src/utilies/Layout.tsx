@@ -2,10 +2,8 @@ import React, { useState, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { logout } from "../store/companyActions";
 import { useDispatch } from "react-redux";
-import { FaSchoolCircleCheck,FaShop } from "react-icons/fa6";
+import { FaCodepen, FaSchool, FaShopify, FaTicketAlt } from "react-icons/fa";
 import { LoginResponse } from "./Problems";
-import { FaCodePullRequest } from "react-icons/fa6";
-
 
 const cachedResponseJson = localStorage.getItem("loginResponse");
 
@@ -38,10 +36,10 @@ const Layout = ({ children }: LayoutProps) => {
   };
 
   return (
-    <div className="flex flex-row bg-blue-950 h-[100% !important]  text-white">
+    <div className="flex flex-row bg-blue-950 h-[100% !important] text-white">
       <div
         className={
-          "hover:w-[100px] w-[50px] flex flex-col transition-all duration-300 shadow-2xl shadow-slate-500 drop-shadow-lg  py-4  justify-between align-middle min-h-[96vh] "
+          "hover:w-[100px] w-[50px] flex flex-col transition-all duration-300 shadow-2xl shadow-slate-500 drop-shadow-lg py-4 justify-between align-middle min-h-[96vh] "
         }
       >
         <div className="flex flex-col gap-4 justify-center items-center h-50 w-100 ">
@@ -70,21 +68,29 @@ const Layout = ({ children }: LayoutProps) => {
             ""
           )}
           {cachedResponse?.userType === "manager" ||
-          
           cachedResponse?.userType === "site_manager" ||
-          cachedResponse?.userType === "admin" ?
-           (
+          cachedResponse?.userType === "admin" ? (
             <Link
               to={"/engineering-requests"}
               className="hover:bg-[#090b1a] p-2 w-full my-class hover:translate-x-1 flex justify-center duration-300"
             >
-              <FaCodePullRequest />
-
+              <FaCodepen />
             </Link>
           ) : (
             ""
           )}
-
+          {/* New Link for Tickets */}
+          {cachedResponse?.userType === "manager" ||
+          cachedResponse?.userType === "admin" ? (
+            <Link
+              to={"/tickets"}
+              className="hover:bg-[#090b1a] p-2 w-full my-class hover:translate-x-1 flex justify-center duration-300"
+            >
+              <FaTicketAlt />
+            </Link>
+          ) : (
+            ""
+          )}
           <Link
             to={"/"}
             className="hover:bg-[#090b1a] hover:shadow-lg hover:translate-x-1 p-2 w-full my-class flex justify-center duration-300"
@@ -108,13 +114,13 @@ const Layout = ({ children }: LayoutProps) => {
             to={"/home"}
             className="hover:bg-[#090b1a] hover:shadow-lg hover:translate-x-1 p-2 w-full my-class flex justify-center duration-300"
           >
-                      <FaShop />
+            <FaShopify />
           </Link>
           <Link
             to={"/attendance"}
             className="hover:bg-[#090b1a] hover:shadow-lg hover:translate-x-1 p-2 w-full my-class flex justify-center duration-300"
           >
-            <FaSchoolCircleCheck />
+            <FaSchool />
           </Link>
         </div>
         <div className="flex flex-col gap-4 justify-center items-center h-50">
@@ -137,7 +143,7 @@ const Layout = ({ children }: LayoutProps) => {
           </button>
         </div>
       </div>
-      <div className="p-4   w-full bg-[#090b1a] h-full">{children}</div>
+      <div className="p-4 w-full bg-[#090b1a] h-full">{children}</div>
     </div>
   );
 };
