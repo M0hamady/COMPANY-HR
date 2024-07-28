@@ -37,7 +37,7 @@ useEffect(() => {
   const handleCompleteAssignment = async (assignmentId: number) => {
     try {
       const response = await axios.post(
-        `https://hrsupport.pythonanywhere.com/api/ticket-assignments/${assignmentId}/complete/`,
+        `http://127.0.0.1:8000/api/ticket-assignments/${assignmentId}/complete/`,
         {},
         {
           headers: {
@@ -70,7 +70,7 @@ useEffect(() => {
   const handleEditTicket = async () => {
     try {
       const response = await axios.put(
-        `https://hrsupport.pythonanywhere.com/api/tickets-detail/${currentTicket[0].id}/`,
+        `http://127.0.0.1:8000/api/tickets-detail/${currentTicket[0].id}/`,
         { title: editTitle, description: editDescription },
         {
           headers: {
@@ -131,7 +131,7 @@ useEffect(() => {
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">{currentTicket[0].title}</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">{currentTicket[0].description}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Created By: {currentTicket[0].created_by}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Created By: {currentTicket[0].created_by_name}</p>
               <button
                 onClick={() => setIsEditing(true)}
                 className="px-4 py-2 mt-2 text-white bg-yellow-500 rounded"

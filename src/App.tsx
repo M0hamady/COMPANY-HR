@@ -67,7 +67,7 @@ export default function App() {
     { name: 'Contact Information', fields: fields.slice(7, 10) },
     { name: 'Education & Employment', fields: fields.slice(10) },
   ];
-  const apiUrl = 'https://hrsupport.pythonanywhere.com/api/form-data/';
+  const apiUrl = 'http://127.0.0.1:8000/api/form-data/';
 
   return (
     <Provider store={Store}>
