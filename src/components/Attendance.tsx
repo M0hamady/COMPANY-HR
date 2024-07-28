@@ -67,7 +67,10 @@ const AttendanceComponent: React.FC = () => {
           );
         }
         else{
-        window.location.href = '/login'
+          if (!response.payload){
+
+            window.location.href = '/login'
+          }
         }
       } else {
         setError("error while handling attendance data");
