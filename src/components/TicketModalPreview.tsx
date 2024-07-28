@@ -131,12 +131,15 @@ useEffect(() => {
               <p className="text-sm text-gray-500 dark:text-gray-400">{currentTicket[0].title}</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">{currentTicket[0].description}</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">Created By: {currentTicket[0].created_by_name}</p>
+              {currentTicket[0].created_by_name === userName && 
+              
               <button
                 onClick={() => setIsEditing(true)}
                 className="px-4 py-2 mt-2 text-white bg-yellow-500 rounded"
               >
                 Edit
               </button>
+              }
               <div className="mt-4">
                 <h4 className="text-md font-semibold text-gray-900 dark:text-white">Steps</h4>
                 {currentTicket[0].steps.map((step: any) => (
