@@ -68,15 +68,15 @@ const Tickets: React.FC = () => {
     );
   }
 
-  if (userType !== "manager") {
-    return (
-      <Layout>
-        <div className="flex justify-center items-center h-full bg-red-100">
-          <div className="text-xl text-red-600">Unauthorized Access</div>
-        </div>
-      </Layout>
-    );
-  }
+//   if (userType !== "manager") {
+//     return (
+//       <Layout>
+//         <div className="flex justify-center items-center h-full bg-red-100">
+//           <div className="text-xl text-red-600">Unauthorized Access</div>
+//         </div>
+//       </Layout>
+//     );
+//   }
 
   return (
     <Layout>
@@ -92,11 +92,12 @@ const Tickets: React.FC = () => {
         </div>
         <div className="flow-root">
           <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
-            {tickets.map((ticket) => (
+            {tickets?.map((ticket) => (
               <li key={ticket.id} className="py-3 sm:py-4">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <img className="w-8 h-8 rounded-full" src={ticket.image || "/default-avatar.png"} alt={ticket.title} />
+                    {ticket.id}
+                    {/* <img className="w-8 h-8 rounded-full" src={ticket.image || "/default-avatar.png"} alt={ticket.title} /> */}
                   </div>
                   <div className="flex-1 min-w-0 ms-4">
                     <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -113,7 +114,7 @@ const Tickets: React.FC = () => {
                     </p>
                   </div>
                   <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                    {ticket.price || "$0"}
+                    {/* {ticket.price || "$0"} */}
                   </div>
                   <button
                     onClick={() => fetchTicketDetails(ticket.id)}

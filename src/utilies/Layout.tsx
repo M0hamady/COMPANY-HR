@@ -79,18 +79,13 @@ const Layout = ({ children }: LayoutProps) => {
           ) : (
             ""
           )}
-          {/* New Link for Tickets */}
-          {cachedResponse?.userType === "manager" ||
-          cachedResponse?.userType === "admin" ? (
-            <Link
-              to={"/tickets"}
-              className="hover:bg-[#090b1a] p-2 w-full my-class hover:translate-x-1 flex justify-center duration-300"
-            >
-              <FaTicketAlt />
-            </Link>
-          ) : (
-            ""
-          )}
+          {/* Updated Tickets Link */}
+          <Link
+            to={"/tickets"}
+            className="hover:bg-[#090b1a] p-2 w-full my-class hover:translate-x-1 flex justify-center duration-300"
+          >
+            <FaTicketAlt />
+          </Link>
           <Link
             to={"/"}
             className="hover:bg-[#090b1a] hover:shadow-lg hover:translate-x-1 p-2 w-full my-class flex justify-center duration-300"

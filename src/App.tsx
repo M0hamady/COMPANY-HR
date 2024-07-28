@@ -20,11 +20,11 @@ import Tickets from './components/Tickets';
 export default function App() {
   const loggedIn = useSelector((state: RootState) => state.company.loggedIn);
   const dispatch: ThunkDispatch<any, undefined, AnyAction> = useDispatch();
-  useEffect(() => {
-    if (Notification.permission !== 'granted') {
-        Notification.requestPermission();
-    }
-}, []);
+//   useEffect(() => {
+//     if (Notification.permission !== 'granted') {
+//         Notification.requestPermission();
+//     }
+// }, []);
   const cachedResponse = localStorage.getItem('loginResponse');
   if (cachedResponse) {
     const data = JSON.parse(cachedResponse);
